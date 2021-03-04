@@ -115,7 +115,7 @@ class RoutingController(object):
         ports = []
         if tunnel.index(sw_name) == 0:
             ports.append(self.topo.node_to_node_port_num(sw_name, tunnel[1]))
-        elif tunnel.index(sw_name) == len(tunnel):
+        elif tunnel.index(sw_name) == len(tunnel) - 1:
             ports.append(self.topo.node_to_node_port_num(sw_name, tunnel[len(tunnel) - 2]))
         else:
             index = tunnel.index(sw_name)
@@ -123,13 +123,24 @@ class RoutingController(object):
             ports.append(self.topo.node_to_node_port_num(sw_name, tunnel[index + 1]))
         return ports
 
+    def get_pwid(self, sw_name):
+        pwid_dic = {}
+        for host in self.topo.get_hosts_connected_to(sw_name):
+            if self.vpls_conf['hosts'][host] == 'A':
+                pwid_dic.update({self.topo.node_to_node_port_num(sw_name, host): 1})
+            elif self.vpls_conf['hosts'][host] == 'B':
+                pwid_dic.update({self.topo.node_to_node_port_num(sw_name, host): 2})
+        return pwid_dic
+
+
+
     def process_network(self):
         ### logic to be executed at the start-up of the topology
         ### hint: compute ECMP paths here
         ### use exercise 08-Simple Routing as a reference
-        print self.topo.get_p4switches().values()
 
-        pass
+        for sw_name in self.topo.get_p4switches().keys():
+            print str(sw_name) + ': ' + str(self.get_pwid(sw_name))
 
 if __name__ == "__main__":
     import sys
