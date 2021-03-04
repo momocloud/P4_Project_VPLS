@@ -24,10 +24,10 @@ print self.tunnel_list
 
 `get_tunnel_ports(self, tunnel, sw_name)`: 返回sw_name的交换机连接tunnel的端口号列表。用例：
 ```python
-        for sw_name in self.topo.get_p4switches().keys():
-            for tunnel in self.tunnel_list:
-                if sw_name in tunnel:
-                    print str(sw_name) + '-' + str(tunnel) + ': ' + str(self.get_tunnel_ports(tunnel, sw_name))
+for sw_name in self.topo.get_p4switches().keys():
+    for tunnel in self.tunnel_list:
+        if sw_name in tunnel:
+            print str(sw_name) + '-' + str(tunnel) + ': ' + str(self.get_tunnel_ports(tunnel, sw_name))
 
 # 打印结果: 
 # s3-(u's1', u's3', u's5'): [1, 3]
@@ -53,7 +53,7 @@ print self.tunnel_list
 `get_pwid(self, sw_name)`: 返回sw_name的交换机端口对应的pw_id，是一个字典。用例：
 ```python
 for sw_name in self.topo.get_p4switches().keys():
-            print str(sw_name) + ': ' + str(self.get_pwid(sw_name))
+    print str(sw_name) + ': ' + str(self.get_pwid(sw_name))
 
 # 打印结果:
 # s3: {}
