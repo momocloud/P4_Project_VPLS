@@ -1,0 +1,39 @@
+table_add encap_forward_with_tunnel encap_forward_with_tunnel_act 1 00:00:0a:00:00:01 => 4 1 1
+table_add encap_forward_with_tunnel encap_forward_with_tunnel_act 2 00:00:0a:00:00:01 => 3 2 2
+
+table_add decap_forward_with_tunnel decap_forward_with_tunnel_act 00:00:0a:00:00:02 1 => 1
+table_add decap_forward_with_tunnel decap_forward_with_tunnel_act 00:00:0a:00:00:02 2 => 2
+
+table_add ecmp_group ecmp_group_act 1 00:00:0a:00:00:01 => 1 2
+table_add ecmp_group ecmp_group_act 2 00:00:0a:00:00:01 => 2 2
+
+table_add ecmp_forward encap_forward_with_tunnel_act 1 0 => 4 1 1
+table_add ecmp_forward encap_forward_with_tunnel_act 1 1 => 3 2 1
+table_add ecmp_forward encap_forward_with_tunnel_act 2 0 => 4 1 2
+table_add ecmp_forward encap_forward_with_tunnel_act 2 1 => 3 2 2
+
+table_add table_ipv4 decrease_ipv4_ttl =>
+
+mc_node_create 0 1 3 4
+mc_node_create 1 2 3 4
+mc_node_create 2 1
+mc_node_create 3 2
+
+mc_mgrp_create 1
+mc_node_associate 1 0
+
+mc_mgrp_create 2
+mc_node_associate 2 1
+
+mc_mgrp_create 3
+mc_node_associate 3 2
+
+mc_mgrp_create 4
+mc_node_associate 4 3
+
+table_add encap_multicast encap_multicast_act 1 => 1 1
+table_add encap_multicast encap_multicast_act 2 => 2 2
+table_add encap_multicast_egress_decap NoAction 3 => 
+table_add encap_multicast_egress_decap NoAction 4 => 
+table_add decap_multicast decap_multicast_act 1 => 3
+table_add decap_multicast decap_multicast_act 2 => 4

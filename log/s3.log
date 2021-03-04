@@ -1,0 +1,822 @@
+Warning: you requested the nanomsg event logger, but bmv2 was compiled without -DBMELOG, and the event logger cannot be activated
+Calling target program-options parser
+[10:15:38.351] [bmv2] [D] [thread 4964] Set default default entry for table 'MyIngress.direct_forward_with_tunnel': NoAction - 
+[10:15:38.351] [bmv2] [D] [thread 4964] Set default default entry for table 'MyIngress.decap_forward_with_tunnel': NoAction - 
+[10:15:38.351] [bmv2] [D] [thread 4964] Set default default entry for table 'MyIngress.direct_multicast': NoAction - 
+[10:15:38.351] [bmv2] [D] [thread 4964] Set default default entry for table 'MyIngress.decap_multicast': NoAction - 
+[10:15:38.351] [bmv2] [D] [thread 4964] Set default default entry for table 'MyIngress.direct_forward_without_tunnel': NoAction - 
+[10:15:38.351] [bmv2] [D] [thread 4964] Set default default entry for table 'tbl_act': act - 
+[10:15:38.351] [bmv2] [D] [thread 4964] Set default default entry for table 'tbl_act_0': act_0 - 
+[10:15:38.351] [bmv2] [D] [thread 4964] Set default default entry for table 'tbl_your_pipeline221': your_pipeline221 - 
+[10:15:38.351] [bmv2] [D] [thread 4964] Set default default entry for table 'MyIngress.ecmp_group': NoAction - 
+[10:15:38.352] [bmv2] [D] [thread 4964] Set default default entry for table 'tbl_act_1': act_1 - 
+[10:15:38.352] [bmv2] [D] [thread 4964] Set default default entry for table 'tbl_act_2': act_2 - 
+[10:15:38.352] [bmv2] [D] [thread 4964] Set default default entry for table 'tbl_your_pipeline221_0': your_pipeline221_0 - 
+[10:15:38.352] [bmv2] [D] [thread 4964] Set default default entry for table 'MyIngress.ecmp_forward': NoAction - 
+[10:15:38.352] [bmv2] [D] [thread 4964] Set default default entry for table 'MyIngress.encap_forward_with_tunnel': NoAction - 
+[10:15:38.352] [bmv2] [D] [thread 4964] Set default default entry for table 'tbl_act_3': act_3 - 
+[10:15:38.352] [bmv2] [D] [thread 4964] Set default default entry for table 'tbl_act_4': act_4 - 
+[10:15:38.352] [bmv2] [D] [thread 4964] Set default default entry for table 'MyIngress.encap_multicast': NoAction - 
+[10:15:38.352] [bmv2] [D] [thread 4964] Set default default entry for table 'MyIngress.table_ipv4': MyIngress.decrease_ipv4_ttl - 
+[10:15:38.352] [bmv2] [D] [thread 4964] Set default default entry for table 'MyEgress.encap_multicast_egress_decap': MyEgress.encap_multicast_egress_decap_act - 
+Adding interface s3-eth1 as port 1
+[10:15:38.357] [bmv2] [D] [thread 4964] Adding interface s3-eth1 as port 1
+Adding interface s3-eth2 as port 2
+[10:15:38.410] [bmv2] [D] [thread 4964] Adding interface s3-eth2 as port 2
+Adding interface s3-eth3 as port 3
+[10:15:38.469] [bmv2] [D] [thread 4964] Adding interface s3-eth3 as port 3
+Adding interface s3-cpu-eth0 as port 4
+[10:15:38.525] [bmv2] [D] [thread 4964] Adding interface s3-cpu-eth0 as port 4
+[10:15:38.575] [bmv2] [I] [thread 4964] Starting Thrift server on port 9092
+[10:15:38.576] [bmv2] [I] [thread 4964] Thrift server was started
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Processing packet received on port 1
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Parser 'parser': start
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Parser 'parser' entering state 'start'
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Extracting header 'ethernet_1'
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Parser state 'start': key is 86dd
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Bytes parsed: 14
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Parser 'parser': end
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Pipeline 'ingress': start
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] p4src/your_pipeline.p4(211) Condition "hdr.tunnel.isValid()" (node_2) is false
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Applying table 'MyIngress.direct_forward_without_tunnel'
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0001
+* hdr.ethernet_1.dstAddr        : 333300000002
+
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Table 'MyIngress.direct_forward_without_tunnel': miss
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Action NoAction
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Applying table 'tbl_act_0'
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Looking up key:
+
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Table 'tbl_act_0': miss
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Action entry is act_0 - 
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Action act_0
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Primitive (no source info)
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Condition "node_11" (node_11) is false
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] p4src/your_pipeline.p4(221) Condition "hdr.tcp.isValid()" (node_12) is true
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Applying table 'tbl_your_pipeline221'
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Looking up key:
+
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Table 'tbl_your_pipeline221': miss
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Action entry is your_pipeline221 - 
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Action your_pipeline221
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] p4src/your_pipeline.p4(221) Primitive hdr.tcp.isValid() && ecmp_group.apply().hit
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Condition "node_18" (node_18) is false
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Applying table 'MyIngress.encap_forward_with_tunnel'
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0001
+* hdr.ethernet_1.dstAddr        : 333300000002
+
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Table 'MyIngress.encap_forward_with_tunnel': miss
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Action NoAction
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Applying table 'tbl_act_4'
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Looking up key:
+
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Table 'tbl_act_4': miss
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Action entry is act_4 - 
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Action act_4
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Primitive (no source info)
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Condition "node_23" (node_23) is false
+[10:15:40.045] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Applying table 'MyIngress.encap_multicast'
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0001
+
+[10:15:40.045] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Table 'MyIngress.encap_multicast': miss
+[10:15:40.046] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.046] [bmv2] [T] [thread 4972] [0.0] [cxt 0] Action NoAction
+[10:15:40.046] [bmv2] [T] [thread 4972] [0.0] [cxt 0] p4src/your_pipeline.p4(225) Condition "hdr.ipv4.isValid()" (node_25) is false
+[10:15:40.046] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Pipeline 'ingress': end
+[10:15:40.046] [bmv2] [D] [thread 4972] [0.0] [cxt 0] Egress port is 0
+[10:15:40.046] [bmv2] [D] [thread 4973] [0.0] [cxt 0] Pipeline 'egress': start
+[10:15:40.046] [bmv2] [T] [thread 4973] [0.0] [cxt 0] p4src/your_pipeline.p4(257) Condition "hdr.tunnel.isValid()" (node_29) is false
+[10:15:40.046] [bmv2] [D] [thread 4973] [0.0] [cxt 0] Pipeline 'egress': end
+[10:15:40.046] [bmv2] [D] [thread 4973] [0.0] [cxt 0] Deparser 'deparser': start
+[10:15:40.046] [bmv2] [T] [thread 4973] [0.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[10:15:40.046] [bmv2] [D] [thread 4973] [0.0] [cxt 0] Deparsing header 'ethernet_1'
+[10:15:40.046] [bmv2] [D] [thread 4973] [0.0] [cxt 0] Deparser 'deparser': end
+[10:15:40.046] [bmv2] [D] [thread 4977] [0.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Processing packet received on port 1
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Parser 'parser': start
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Parser 'parser' entering state 'start'
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Extracting header 'ethernet_1'
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Parser state 'start': key is 86dd
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Bytes parsed: 14
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Parser 'parser': end
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Pipeline 'ingress': start
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] p4src/your_pipeline.p4(211) Condition "hdr.tunnel.isValid()" (node_2) is false
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Applying table 'MyIngress.direct_forward_without_tunnel'
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0001
+* hdr.ethernet_1.dstAddr        : 333300000002
+
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Table 'MyIngress.direct_forward_without_tunnel': miss
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Action NoAction
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Applying table 'tbl_act_0'
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Looking up key:
+
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Table 'tbl_act_0': miss
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Action entry is act_0 - 
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Action act_0
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Primitive (no source info)
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Condition "node_11" (node_11) is false
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] p4src/your_pipeline.p4(221) Condition "hdr.tcp.isValid()" (node_12) is true
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Applying table 'tbl_your_pipeline221'
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Looking up key:
+
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Table 'tbl_your_pipeline221': miss
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Action entry is your_pipeline221 - 
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Action your_pipeline221
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] p4src/your_pipeline.p4(221) Primitive hdr.tcp.isValid() && ecmp_group.apply().hit
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Condition "node_18" (node_18) is false
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Applying table 'MyIngress.encap_forward_with_tunnel'
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0001
+* hdr.ethernet_1.dstAddr        : 333300000002
+
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Table 'MyIngress.encap_forward_with_tunnel': miss
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Action NoAction
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Applying table 'tbl_act_4'
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Looking up key:
+
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Table 'tbl_act_4': miss
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Action entry is act_4 - 
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Action act_4
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Primitive (no source info)
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Condition "node_23" (node_23) is false
+[10:15:40.210] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Applying table 'MyIngress.encap_multicast'
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0001
+
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Table 'MyIngress.encap_multicast': miss
+[10:15:40.210] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.211] [bmv2] [T] [thread 4972] [1.0] [cxt 0] Action NoAction
+[10:15:40.211] [bmv2] [T] [thread 4972] [1.0] [cxt 0] p4src/your_pipeline.p4(225) Condition "hdr.ipv4.isValid()" (node_25) is false
+[10:15:40.211] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Pipeline 'ingress': end
+[10:15:40.211] [bmv2] [D] [thread 4972] [1.0] [cxt 0] Egress port is 0
+[10:15:40.211] [bmv2] [D] [thread 4973] [1.0] [cxt 0] Pipeline 'egress': start
+[10:15:40.211] [bmv2] [T] [thread 4973] [1.0] [cxt 0] p4src/your_pipeline.p4(257) Condition "hdr.tunnel.isValid()" (node_29) is false
+[10:15:40.211] [bmv2] [D] [thread 4973] [1.0] [cxt 0] Pipeline 'egress': end
+[10:15:40.211] [bmv2] [D] [thread 4973] [1.0] [cxt 0] Deparser 'deparser': start
+[10:15:40.211] [bmv2] [T] [thread 4973] [1.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[10:15:40.211] [bmv2] [D] [thread 4973] [1.0] [cxt 0] Deparsing header 'ethernet_1'
+[10:15:40.211] [bmv2] [D] [thread 4973] [1.0] [cxt 0] Deparser 'deparser': end
+[10:15:40.211] [bmv2] [D] [thread 4977] [1.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[10:15:40.530] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Processing packet received on port 3
+[10:15:40.530] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Parser 'parser': start
+[10:15:40.530] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Parser 'parser' entering state 'start'
+[10:15:40.530] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Extracting header 'ethernet_1'
+[10:15:40.530] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Parser state 'start': key is 86dd
+[10:15:40.530] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Bytes parsed: 14
+[10:15:40.530] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Parser 'parser': end
+[10:15:40.530] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Pipeline 'ingress': start
+[10:15:40.530] [bmv2] [T] [thread 4972] [2.0] [cxt 0] p4src/your_pipeline.p4(211) Condition "hdr.tunnel.isValid()" (node_2) is false
+[10:15:40.530] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Applying table 'MyIngress.direct_forward_without_tunnel'
+[10:15:40.530] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0003
+* hdr.ethernet_1.dstAddr        : 333300000002
+
+[10:15:40.530] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Table 'MyIngress.direct_forward_without_tunnel': miss
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Action NoAction
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Applying table 'tbl_act_0'
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Looking up key:
+
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Table 'tbl_act_0': miss
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Action entry is act_0 - 
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Action act_0
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Primitive (no source info)
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Condition "node_11" (node_11) is false
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] p4src/your_pipeline.p4(221) Condition "hdr.tcp.isValid()" (node_12) is true
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Applying table 'tbl_your_pipeline221'
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Looking up key:
+
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Table 'tbl_your_pipeline221': miss
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Action entry is your_pipeline221 - 
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Action your_pipeline221
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] p4src/your_pipeline.p4(221) Primitive hdr.tcp.isValid() && ecmp_group.apply().hit
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Condition "node_18" (node_18) is false
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Applying table 'MyIngress.encap_forward_with_tunnel'
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0003
+* hdr.ethernet_1.dstAddr        : 333300000002
+
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Table 'MyIngress.encap_forward_with_tunnel': miss
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Action NoAction
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Applying table 'tbl_act_4'
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Looking up key:
+
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Table 'tbl_act_4': miss
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Action entry is act_4 - 
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Action act_4
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Primitive (no source info)
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Condition "node_23" (node_23) is false
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Applying table 'MyIngress.encap_multicast'
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0003
+
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Table 'MyIngress.encap_multicast': miss
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] Action NoAction
+[10:15:40.531] [bmv2] [T] [thread 4972] [2.0] [cxt 0] p4src/your_pipeline.p4(225) Condition "hdr.ipv4.isValid()" (node_25) is false
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Pipeline 'ingress': end
+[10:15:40.531] [bmv2] [D] [thread 4972] [2.0] [cxt 0] Egress port is 0
+[10:15:40.531] [bmv2] [D] [thread 4973] [2.0] [cxt 0] Pipeline 'egress': start
+[10:15:40.531] [bmv2] [T] [thread 4973] [2.0] [cxt 0] p4src/your_pipeline.p4(257) Condition "hdr.tunnel.isValid()" (node_29) is false
+[10:15:40.531] [bmv2] [D] [thread 4973] [2.0] [cxt 0] Pipeline 'egress': end
+[10:15:40.531] [bmv2] [D] [thread 4973] [2.0] [cxt 0] Deparser 'deparser': start
+[10:15:40.531] [bmv2] [T] [thread 4973] [2.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[10:15:40.532] [bmv2] [D] [thread 4973] [2.0] [cxt 0] Deparsing header 'ethernet_1'
+[10:15:40.532] [bmv2] [D] [thread 4973] [2.0] [cxt 0] Deparser 'deparser': end
+[10:15:40.532] [bmv2] [D] [thread 4977] [2.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[10:15:40.702] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Processing packet received on port 2
+[10:15:40.702] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Parser 'parser': start
+[10:15:40.702] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Parser 'parser' entering state 'start'
+[10:15:40.702] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Extracting header 'ethernet_1'
+[10:15:40.702] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Parser state 'start': key is 86dd
+[10:15:40.702] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Bytes parsed: 14
+[10:15:40.702] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Parser 'parser': end
+[10:15:40.702] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Pipeline 'ingress': start
+[10:15:40.702] [bmv2] [T] [thread 4972] [3.0] [cxt 0] p4src/your_pipeline.p4(211) Condition "hdr.tunnel.isValid()" (node_2) is false
+[10:15:40.702] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Applying table 'MyIngress.direct_forward_without_tunnel'
+[10:15:40.702] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0002
+* hdr.ethernet_1.dstAddr        : 333300000002
+
+[10:15:40.702] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Table 'MyIngress.direct_forward_without_tunnel': miss
+[10:15:40.702] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.702] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Action NoAction
+[10:15:40.702] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Applying table 'tbl_act_0'
+[10:15:40.702] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Looking up key:
+
+[10:15:40.702] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Table 'tbl_act_0': miss
+[10:15:40.702] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Action entry is act_0 - 
+[10:15:40.702] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Action act_0
+[10:15:40.702] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Primitive (no source info)
+[10:15:40.702] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Condition "node_11" (node_11) is false
+[10:15:40.702] [bmv2] [T] [thread 4972] [3.0] [cxt 0] p4src/your_pipeline.p4(221) Condition "hdr.tcp.isValid()" (node_12) is true
+[10:15:40.702] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Applying table 'tbl_your_pipeline221'
+[10:15:40.702] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Looking up key:
+
+[10:15:40.702] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Table 'tbl_your_pipeline221': miss
+[10:15:40.703] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Action entry is your_pipeline221 - 
+[10:15:40.703] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Action your_pipeline221
+[10:15:40.703] [bmv2] [T] [thread 4972] [3.0] [cxt 0] p4src/your_pipeline.p4(221) Primitive hdr.tcp.isValid() && ecmp_group.apply().hit
+[10:15:40.703] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Condition "node_18" (node_18) is false
+[10:15:40.703] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Applying table 'MyIngress.encap_forward_with_tunnel'
+[10:15:40.703] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0002
+* hdr.ethernet_1.dstAddr        : 333300000002
+
+[10:15:40.703] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Table 'MyIngress.encap_forward_with_tunnel': miss
+[10:15:40.703] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.703] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Action NoAction
+[10:15:40.703] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Applying table 'tbl_act_4'
+[10:15:40.703] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Looking up key:
+
+[10:15:40.703] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Table 'tbl_act_4': miss
+[10:15:40.703] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Action entry is act_4 - 
+[10:15:40.703] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Action act_4
+[10:15:40.703] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Primitive (no source info)
+[10:15:40.703] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Condition "node_23" (node_23) is false
+[10:15:40.703] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Applying table 'MyIngress.encap_multicast'
+[10:15:40.703] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0002
+
+[10:15:40.703] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Table 'MyIngress.encap_multicast': miss
+[10:15:40.703] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.703] [bmv2] [T] [thread 4972] [3.0] [cxt 0] Action NoAction
+[10:15:40.703] [bmv2] [T] [thread 4972] [3.0] [cxt 0] p4src/your_pipeline.p4(225) Condition "hdr.ipv4.isValid()" (node_25) is false
+[10:15:40.703] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Pipeline 'ingress': end
+[10:15:40.703] [bmv2] [D] [thread 4972] [3.0] [cxt 0] Egress port is 0
+[10:15:40.703] [bmv2] [D] [thread 4973] [3.0] [cxt 0] Pipeline 'egress': start
+[10:15:40.703] [bmv2] [T] [thread 4973] [3.0] [cxt 0] p4src/your_pipeline.p4(257) Condition "hdr.tunnel.isValid()" (node_29) is false
+[10:15:40.703] [bmv2] [D] [thread 4973] [3.0] [cxt 0] Pipeline 'egress': end
+[10:15:40.703] [bmv2] [D] [thread 4973] [3.0] [cxt 0] Deparser 'deparser': start
+[10:15:40.703] [bmv2] [T] [thread 4973] [3.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[10:15:40.703] [bmv2] [D] [thread 4973] [3.0] [cxt 0] Deparsing header 'ethernet_1'
+[10:15:40.703] [bmv2] [D] [thread 4973] [3.0] [cxt 0] Deparser 'deparser': end
+[10:15:40.703] [bmv2] [D] [thread 4977] [3.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Processing packet received on port 4
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Parser 'parser': start
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Parser 'parser' entering state 'start'
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Extracting header 'ethernet_1'
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Parser state 'start': key is 86dd
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Bytes parsed: 14
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Parser 'parser': end
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Pipeline 'ingress': start
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] p4src/your_pipeline.p4(211) Condition "hdr.tunnel.isValid()" (node_2) is false
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Applying table 'MyIngress.direct_forward_without_tunnel'
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0004
+* hdr.ethernet_1.dstAddr        : 333300000002
+
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Table 'MyIngress.direct_forward_without_tunnel': miss
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Action NoAction
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Applying table 'tbl_act_0'
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Looking up key:
+
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Table 'tbl_act_0': miss
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Action entry is act_0 - 
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Action act_0
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Primitive (no source info)
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Condition "node_11" (node_11) is false
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] p4src/your_pipeline.p4(221) Condition "hdr.tcp.isValid()" (node_12) is true
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Applying table 'tbl_your_pipeline221'
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Looking up key:
+
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Table 'tbl_your_pipeline221': miss
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Action entry is your_pipeline221 - 
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Action your_pipeline221
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] p4src/your_pipeline.p4(221) Primitive hdr.tcp.isValid() && ecmp_group.apply().hit
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Condition "node_18" (node_18) is false
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Applying table 'MyIngress.encap_forward_with_tunnel'
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0004
+* hdr.ethernet_1.dstAddr        : 333300000002
+
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Table 'MyIngress.encap_forward_with_tunnel': miss
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Action NoAction
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Applying table 'tbl_act_4'
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Looking up key:
+
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Table 'tbl_act_4': miss
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Action entry is act_4 - 
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Action act_4
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Primitive (no source info)
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Condition "node_23" (node_23) is false
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Applying table 'MyIngress.encap_multicast'
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0004
+
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Table 'MyIngress.encap_multicast': miss
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] Action NoAction
+[10:15:40.834] [bmv2] [T] [thread 4972] [4.0] [cxt 0] p4src/your_pipeline.p4(225) Condition "hdr.ipv4.isValid()" (node_25) is false
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Pipeline 'ingress': end
+[10:15:40.834] [bmv2] [D] [thread 4972] [4.0] [cxt 0] Egress port is 0
+[10:15:40.834] [bmv2] [D] [thread 4973] [4.0] [cxt 0] Pipeline 'egress': start
+[10:15:40.834] [bmv2] [T] [thread 4973] [4.0] [cxt 0] p4src/your_pipeline.p4(257) Condition "hdr.tunnel.isValid()" (node_29) is false
+[10:15:40.834] [bmv2] [D] [thread 4973] [4.0] [cxt 0] Pipeline 'egress': end
+[10:15:40.834] [bmv2] [D] [thread 4973] [4.0] [cxt 0] Deparser 'deparser': start
+[10:15:40.834] [bmv2] [T] [thread 4973] [4.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[10:15:40.834] [bmv2] [D] [thread 4973] [4.0] [cxt 0] Deparsing header 'ethernet_1'
+[10:15:40.834] [bmv2] [D] [thread 4973] [4.0] [cxt 0] Deparser 'deparser': end
+[10:15:40.834] [bmv2] [D] [thread 4977] [4.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[10:15:40.850] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Processing packet received on port 3
+[10:15:40.850] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Parser 'parser': start
+[10:15:40.850] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Parser 'parser' entering state 'start'
+[10:15:40.850] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Extracting header 'ethernet_1'
+[10:15:40.850] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Parser state 'start': key is 86dd
+[10:15:40.850] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Bytes parsed: 14
+[10:15:40.850] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Parser 'parser': end
+[10:15:40.850] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Pipeline 'ingress': start
+[10:15:40.850] [bmv2] [T] [thread 4972] [5.0] [cxt 0] p4src/your_pipeline.p4(211) Condition "hdr.tunnel.isValid()" (node_2) is false
+[10:15:40.850] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Applying table 'MyIngress.direct_forward_without_tunnel'
+[10:15:40.850] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0003
+* hdr.ethernet_1.dstAddr        : 333300000002
+
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Table 'MyIngress.direct_forward_without_tunnel': miss
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Action NoAction
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Applying table 'tbl_act_0'
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Looking up key:
+
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Table 'tbl_act_0': miss
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Action entry is act_0 - 
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Action act_0
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Primitive (no source info)
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Condition "node_11" (node_11) is false
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] p4src/your_pipeline.p4(221) Condition "hdr.tcp.isValid()" (node_12) is true
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Applying table 'tbl_your_pipeline221'
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Looking up key:
+
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Table 'tbl_your_pipeline221': miss
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Action entry is your_pipeline221 - 
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Action your_pipeline221
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] p4src/your_pipeline.p4(221) Primitive hdr.tcp.isValid() && ecmp_group.apply().hit
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Condition "node_18" (node_18) is false
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Applying table 'MyIngress.encap_forward_with_tunnel'
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0003
+* hdr.ethernet_1.dstAddr        : 333300000002
+
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Table 'MyIngress.encap_forward_with_tunnel': miss
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Action NoAction
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Applying table 'tbl_act_4'
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Looking up key:
+
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Table 'tbl_act_4': miss
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Action entry is act_4 - 
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Action act_4
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Primitive (no source info)
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Condition "node_23" (node_23) is false
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Applying table 'MyIngress.encap_multicast'
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0003
+
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Table 'MyIngress.encap_multicast': miss
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] Action NoAction
+[10:15:40.851] [bmv2] [T] [thread 4972] [5.0] [cxt 0] p4src/your_pipeline.p4(225) Condition "hdr.ipv4.isValid()" (node_25) is false
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Pipeline 'ingress': end
+[10:15:40.851] [bmv2] [D] [thread 4972] [5.0] [cxt 0] Egress port is 0
+[10:15:40.851] [bmv2] [D] [thread 4973] [5.0] [cxt 0] Pipeline 'egress': start
+[10:15:40.851] [bmv2] [T] [thread 4973] [5.0] [cxt 0] p4src/your_pipeline.p4(257) Condition "hdr.tunnel.isValid()" (node_29) is false
+[10:15:40.851] [bmv2] [D] [thread 4973] [5.0] [cxt 0] Pipeline 'egress': end
+[10:15:40.851] [bmv2] [D] [thread 4973] [5.0] [cxt 0] Deparser 'deparser': start
+[10:15:40.851] [bmv2] [T] [thread 4973] [5.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[10:15:40.852] [bmv2] [D] [thread 4973] [5.0] [cxt 0] Deparsing header 'ethernet_1'
+[10:15:40.852] [bmv2] [D] [thread 4973] [5.0] [cxt 0] Deparser 'deparser': end
+[10:15:40.852] [bmv2] [D] [thread 4977] [5.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[10:15:40.946] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Processing packet received on port 4
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Parser 'parser': start
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Parser 'parser' entering state 'start'
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Extracting header 'ethernet_1'
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Parser state 'start': key is 86dd
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Bytes parsed: 14
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Parser 'parser': end
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Pipeline 'ingress': start
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] p4src/your_pipeline.p4(211) Condition "hdr.tunnel.isValid()" (node_2) is false
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Applying table 'MyIngress.direct_forward_without_tunnel'
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0004
+* hdr.ethernet_1.dstAddr        : 333300000002
+
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Table 'MyIngress.direct_forward_without_tunnel': miss
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Action NoAction
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Applying table 'tbl_act_0'
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Looking up key:
+
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Table 'tbl_act_0': miss
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Action entry is act_0 - 
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Action act_0
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Primitive (no source info)
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Condition "node_11" (node_11) is false
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] p4src/your_pipeline.p4(221) Condition "hdr.tcp.isValid()" (node_12) is true
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Applying table 'tbl_your_pipeline221'
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Looking up key:
+
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Table 'tbl_your_pipeline221': miss
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Action entry is your_pipeline221 - 
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Action your_pipeline221
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] p4src/your_pipeline.p4(221) Primitive hdr.tcp.isValid() && ecmp_group.apply().hit
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Condition "node_18" (node_18) is false
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Applying table 'MyIngress.encap_forward_with_tunnel'
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0004
+* hdr.ethernet_1.dstAddr        : 333300000002
+
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Table 'MyIngress.encap_forward_with_tunnel': miss
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Action NoAction
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Applying table 'tbl_act_4'
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Looking up key:
+
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Table 'tbl_act_4': miss
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Action entry is act_4 - 
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Action act_4
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Primitive (no source info)
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Condition "node_23" (node_23) is false
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Applying table 'MyIngress.encap_multicast'
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0004
+
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Table 'MyIngress.encap_multicast': miss
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Action entry is NoAction - 
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] Action NoAction
+[10:15:40.947] [bmv2] [T] [thread 4972] [6.0] [cxt 0] p4src/your_pipeline.p4(225) Condition "hdr.ipv4.isValid()" (node_25) is false
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Pipeline 'ingress': end
+[10:15:40.947] [bmv2] [D] [thread 4972] [6.0] [cxt 0] Egress port is 0
+[10:15:40.947] [bmv2] [D] [thread 4973] [6.0] [cxt 0] Pipeline 'egress': start
+[10:15:40.947] [bmv2] [T] [thread 4973] [6.0] [cxt 0] p4src/your_pipeline.p4(257) Condition "hdr.tunnel.isValid()" (node_29) is false
+[10:15:40.947] [bmv2] [D] [thread 4973] [6.0] [cxt 0] Pipeline 'egress': end
+[10:15:40.947] [bmv2] [D] [thread 4973] [6.0] [cxt 0] Deparser 'deparser': start
+[10:15:40.947] [bmv2] [T] [thread 4973] [6.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[10:15:40.947] [bmv2] [D] [thread 4973] [6.0] [cxt 0] Deparsing header 'ethernet_1'
+[10:15:40.947] [bmv2] [D] [thread 4973] [6.0] [cxt 0] Deparser 'deparser': end
+[10:15:40.947] [bmv2] [D] [thread 4977] [6.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[10:15:41.014] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Processing packet received on port 2
+[10:15:41.014] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Parser 'parser': start
+[10:15:41.014] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Parser 'parser' entering state 'start'
+[10:15:41.014] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Extracting header 'ethernet_1'
+[10:15:41.014] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Parser state 'start': key is 86dd
+[10:15:41.014] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Bytes parsed: 14
+[10:15:41.014] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Parser 'parser': end
+[10:15:41.014] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Pipeline 'ingress': start
+[10:15:41.014] [bmv2] [T] [thread 4972] [7.0] [cxt 0] p4src/your_pipeline.p4(211) Condition "hdr.tunnel.isValid()" (node_2) is false
+[10:15:41.014] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Applying table 'MyIngress.direct_forward_without_tunnel'
+[10:15:41.014] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0002
+* hdr.ethernet_1.dstAddr        : 333300000002
+
+[10:15:41.014] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Table 'MyIngress.direct_forward_without_tunnel': miss
+[10:15:41.014] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Action entry is NoAction - 
+[10:15:41.014] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Action NoAction
+[10:15:41.014] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Applying table 'tbl_act_0'
+[10:15:41.014] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Looking up key:
+
+[10:15:41.014] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Table 'tbl_act_0': miss
+[10:15:41.014] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Action entry is act_0 - 
+[10:15:41.014] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Action act_0
+[10:15:41.014] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Primitive (no source info)
+[10:15:41.014] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Condition "node_11" (node_11) is false
+[10:15:41.014] [bmv2] [T] [thread 4972] [7.0] [cxt 0] p4src/your_pipeline.p4(221) Condition "hdr.tcp.isValid()" (node_12) is true
+[10:15:41.014] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Applying table 'tbl_your_pipeline221'
+[10:15:41.015] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Looking up key:
+
+[10:15:41.015] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Table 'tbl_your_pipeline221': miss
+[10:15:41.015] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Action entry is your_pipeline221 - 
+[10:15:41.015] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Action your_pipeline221
+[10:15:41.015] [bmv2] [T] [thread 4972] [7.0] [cxt 0] p4src/your_pipeline.p4(221) Primitive hdr.tcp.isValid() && ecmp_group.apply().hit
+[10:15:41.015] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Condition "node_18" (node_18) is false
+[10:15:41.015] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Applying table 'MyIngress.encap_forward_with_tunnel'
+[10:15:41.015] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0002
+* hdr.ethernet_1.dstAddr        : 333300000002
+
+[10:15:41.015] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Table 'MyIngress.encap_forward_with_tunnel': miss
+[10:15:41.015] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Action entry is NoAction - 
+[10:15:41.015] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Action NoAction
+[10:15:41.015] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Applying table 'tbl_act_4'
+[10:15:41.015] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Looking up key:
+
+[10:15:41.015] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Table 'tbl_act_4': miss
+[10:15:41.015] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Action entry is act_4 - 
+[10:15:41.015] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Action act_4
+[10:15:41.015] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Primitive (no source info)
+[10:15:41.015] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Condition "node_23" (node_23) is false
+[10:15:41.015] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Applying table 'MyIngress.encap_multicast'
+[10:15:41.015] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Looking up key:
+* standard_metadata.ingress_port: 0002
+
+[10:15:41.015] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Table 'MyIngress.encap_multicast': miss
+[10:15:41.015] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Action entry is NoAction - 
+[10:15:41.015] [bmv2] [T] [thread 4972] [7.0] [cxt 0] Action NoAction
+[10:15:41.015] [bmv2] [T] [thread 4972] [7.0] [cxt 0] p4src/your_pipeline.p4(225) Condition "hdr.ipv4.isValid()" (node_25) is false
+[10:15:41.015] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Pipeline 'ingress': end
+[10:15:41.015] [bmv2] [D] [thread 4972] [7.0] [cxt 0] Egress port is 0
+[10:15:41.015] [bmv2] [D] [thread 4973] [7.0] [cxt 0] Pipeline 'egress': start
+[10:15:41.015] [bmv2] [T] [thread 4973] [7.0] [cxt 0] p4src/your_pipeline.p4(257) Condition "hdr.tunnel.isValid()" (node_29) is false
+[10:15:41.015] [bmv2] [D] [thread 4973] [7.0] [cxt 0] Pipeline 'egress': end
+[10:15:41.015] [bmv2] [D] [thread 4973] [7.0] [cxt 0] Deparser 'deparser': start
+[10:15:41.015] [bmv2] [T] [thread 4973] [7.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[10:15:41.015] [bmv2] [D] [thread 4973] [7.0] [cxt 0] Deparsing header 'ethernet_1'
+[10:15:41.015] [bmv2] [D] [thread 4973] [7.0] [cxt 0] Deparser 'deparser': end
+[10:15:41.015] [bmv2] [D] [thread 4977] [7.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[10:15:42.736] [bmv2] [T] [thread 5148] bm_get_config
+[10:15:42.743] [bmv2] [T] [thread 5148] bm_table_add_entry
+[10:15:42.744] [bmv2] [D] [thread 5148] Entry 0 added to table 'MyIngress.direct_forward_with_tunnel'
+[10:15:42.745] [bmv2] [D] [thread 5148] Dumping entry 0
+Match key:
+* standard_metadata.ingress_port: EXACT     0001
+* hdr.tunnel.tunnel_id          : EXACT     0004
+Action entry: MyIngress.direct_forward_with_tunnel_act - 2,
+
+[10:15:42.746] [bmv2] [T] [thread 5148] bm_table_add_entry
+[10:15:42.747] [bmv2] [D] [thread 5148] Entry 1 added to table 'MyIngress.direct_forward_with_tunnel'
+[10:15:42.748] [bmv2] [D] [thread 5148] Dumping entry 1
+Match key:
+* standard_metadata.ingress_port: EXACT     0002
+* hdr.tunnel.tunnel_id          : EXACT     0004
+Action entry: MyIngress.direct_forward_with_tunnel_act - 1,
+
+[10:15:42.749] [bmv2] [T] [thread 5148] bm_table_add_entry
+[10:15:42.750] [bmv2] [D] [thread 5148] Entry 2 added to table 'MyIngress.direct_forward_with_tunnel'
+[10:15:42.750] [bmv2] [D] [thread 5148] Dumping entry 2
+Match key:
+* standard_metadata.ingress_port: EXACT     0001
+* hdr.tunnel.tunnel_id          : EXACT     0002
+Action entry: MyIngress.direct_forward_with_tunnel_act - 3,
+
+[10:15:42.751] [bmv2] [T] [thread 5148] bm_table_add_entry
+[10:15:42.752] [bmv2] [D] [thread 5148] Entry 3 added to table 'MyIngress.direct_forward_with_tunnel'
+[10:15:42.753] [bmv2] [D] [thread 5148] Dumping entry 3
+Match key:
+* standard_metadata.ingress_port: EXACT     0003
+* hdr.tunnel.tunnel_id          : EXACT     0002
+Action entry: MyIngress.direct_forward_with_tunnel_act - 1,
+
+[10:15:42.754] [bmv2] [T] [thread 5148] bm_table_add_entry
+[10:15:42.754] [bmv2] [D] [thread 5148] Entry 4 added to table 'MyIngress.direct_forward_with_tunnel'
+[10:15:42.754] [bmv2] [D] [thread 5148] Dumping entry 4
+Match key:
+* standard_metadata.ingress_port: EXACT     0002
+* hdr.tunnel.tunnel_id          : EXACT     0006
+Action entry: MyIngress.direct_forward_with_tunnel_act - 3,
+
+[10:15:42.755] [bmv2] [T] [thread 5148] bm_table_add_entry
+[10:15:42.755] [bmv2] [D] [thread 5148] Entry 5 added to table 'MyIngress.direct_forward_with_tunnel'
+[10:15:42.755] [bmv2] [D] [thread 5148] Dumping entry 5
+Match key:
+* standard_metadata.ingress_port: EXACT     0003
+* hdr.tunnel.tunnel_id          : EXACT     0006
+Action entry: MyIngress.direct_forward_with_tunnel_act - 2,
+
+[10:15:42.755] [bmv2] [T] [thread 5148] bm_table_add_entry
+[10:15:42.755] [bmv2] [D] [thread 5148] Entry 0 added to table 'MyIngress.table_ipv4'
+[10:15:42.756] [bmv2] [D] [thread 5148] Dumping entry 0
+Match key:
+Action entry: MyIngress.decrease_ipv4_ttl - 
+
+[10:15:42.757] [bmv2] [T] [thread 5148] bm_mc_node_create
+[10:15:42.757] [bmv2] [D] [thread 5148] node created for rid 0
+[10:15:42.758] [bmv2] [T] [thread 5148] bm_mc_node_create
+[10:15:42.758] [bmv2] [D] [thread 5148] node created for rid 1
+[10:15:42.758] [bmv2] [T] [thread 5148] bm_mc_node_create
+[10:15:42.758] [bmv2] [D] [thread 5148] node created for rid 2
+[10:15:42.758] [bmv2] [T] [thread 5148] bm_mc_mgrp_create
+[10:15:42.758] [bmv2] [D] [thread 5148] mgrp node created for mgid 1
+[10:15:42.758] [bmv2] [T] [thread 5148] bm_mc_node_associate
+[10:15:42.758] [bmv2] [D] [thread 5148] node associated with mgid 1
+[10:15:42.759] [bmv2] [T] [thread 5148] bm_mc_mgrp_create
+[10:15:42.759] [bmv2] [D] [thread 5148] mgrp node created for mgid 2
+[10:15:42.759] [bmv2] [T] [thread 5148] bm_mc_node_associate
+[10:15:42.759] [bmv2] [D] [thread 5148] node associated with mgid 2
+[10:15:42.759] [bmv2] [T] [thread 5148] bm_mc_mgrp_create
+[10:15:42.759] [bmv2] [D] [thread 5148] mgrp node created for mgid 3
+[10:15:42.759] [bmv2] [T] [thread 5148] bm_mc_node_associate
+[10:15:42.759] [bmv2] [D] [thread 5148] node associated with mgid 3
+[10:15:42.759] [bmv2] [T] [thread 5148] bm_table_add_entry
+[10:15:42.760] [bmv2] [D] [thread 5148] Entry 0 added to table 'MyIngress.direct_multicast'
+[10:15:42.760] [bmv2] [D] [thread 5148] Dumping entry 0
+Match key:
+* standard_metadata.ingress_port: EXACT     0001
+Action entry: MyIngress.direct_multicast_act - 1,
+
+[10:15:42.760] [bmv2] [T] [thread 5148] bm_table_add_entry
+[10:15:42.760] [bmv2] [D] [thread 5148] Entry 1 added to table 'MyIngress.direct_multicast'
+[10:15:42.760] [bmv2] [D] [thread 5148] Dumping entry 1
+Match key:
+* standard_metadata.ingress_port: EXACT     0002
+Action entry: MyIngress.direct_multicast_act - 2,
+
+[10:15:42.760] [bmv2] [T] [thread 5148] bm_table_add_entry
+[10:15:42.760] [bmv2] [D] [thread 5148] Entry 2 added to table 'MyIngress.direct_multicast'
+[10:15:42.760] [bmv2] [D] [thread 5148] Dumping entry 2
+Match key:
+* standard_metadata.ingress_port: EXACT     0003
+Action entry: MyIngress.direct_multicast_act - 3,
+
+[10:15:42.761] [bmv2] [T] [thread 5148] bm_table_add_entry
+[10:15:42.761] [bmv2] [D] [thread 5148] Entry 0 added to table 'MyEgress.encap_multicast_egress_decap'
+[10:15:42.761] [bmv2] [D] [thread 5148] Dumping entry 0
+Match key:
+* standard_metadata.egress_port: EXACT     0001
+Action entry: NoAction - 
+
+[10:15:42.761] [bmv2] [T] [thread 5148] bm_table_add_entry
+[10:15:42.761] [bmv2] [D] [thread 5148] Entry 1 added to table 'MyEgress.encap_multicast_egress_decap'
+[10:15:42.761] [bmv2] [D] [thread 5148] Dumping entry 1
+Match key:
+* standard_metadata.egress_port: EXACT     0002
+Action entry: NoAction - 
+
+[10:15:42.761] [bmv2] [T] [thread 5148] bm_table_add_entry
+[10:15:42.762] [bmv2] [D] [thread 5148] Entry 2 added to table 'MyEgress.encap_multicast_egress_decap'
+[10:15:42.762] [bmv2] [D] [thread 5148] Dumping entry 2
+Match key:
+* standard_metadata.egress_port: EXACT     0003
+Action entry: NoAction - 
+
+[10:17:10.274] [bmv2] [T] [thread 5272] bm_get_config
+[10:17:10.277] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.278] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.278] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.279] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.280] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.280] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.280] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.281] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.281] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.281] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.281] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.281] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.282] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.282] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.283] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.284] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.284] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.284] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.284] [bmv2] [T] [thread 5272] bm_mt_get_entries
+[10:17:10.350] [bmv2] [T] [thread 5272] bm_reset_state
+[10:17:10.357] [bmv2] [D] [thread 5272] Resetting simple_switch target-specific state
+[10:17:10.357] [bmv2] [D] [thread 5272] resetting PRE state
+[10:17:10.384] [bmv2] [T] [thread 5277] mirroring_sesssion_add
+[10:17:10.388] [bmv2] [T] [thread 5282] bm_get_config
+[10:17:10.391] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.391] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.392] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.393] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.393] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.394] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.394] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.395] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.395] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.395] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.395] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.396] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.396] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.396] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.397] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.397] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.397] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.398] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:10.399] [bmv2] [T] [thread 5282] bm_mt_get_entries
+[10:17:53.888] [bmv2] [T] [thread 5360] bm_get_config
+[10:17:53.891] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.892] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.893] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.893] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.894] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.895] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.896] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.897] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.897] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.898] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.899] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.899] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.900] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.900] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.901] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.901] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.902] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.902] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.902] [bmv2] [T] [thread 5360] bm_mt_get_entries
+[10:17:53.934] [bmv2] [T] [thread 5360] bm_reset_state
+[10:17:53.941] [bmv2] [D] [thread 5360] Resetting simple_switch target-specific state
+[10:17:53.941] [bmv2] [D] [thread 5360] resetting PRE state
+[10:17:53.969] [bmv2] [T] [thread 5365] mirroring_sesssion_add
+[10:17:53.973] [bmv2] [T] [thread 5370] bm_get_config
+[10:17:53.975] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.975] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.976] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.976] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.977] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.977] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.977] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.978] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.978] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.979] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.979] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.979] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.980] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.980] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.980] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.981] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.982] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.982] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:17:53.983] [bmv2] [T] [thread 5370] bm_mt_get_entries
+[10:18:22.009] [bmv2] [T] [thread 5453] bm_get_config
+[10:18:22.015] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.015] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.016] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.016] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.016] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.017] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.017] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.017] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.018] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.018] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.018] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.019] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.019] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.019] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.019] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.020] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.020] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.020] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.020] [bmv2] [T] [thread 5453] bm_mt_get_entries
+[10:18:22.058] [bmv2] [T] [thread 5453] bm_reset_state
+[10:18:22.086] [bmv2] [D] [thread 5453] Resetting simple_switch target-specific state
+[10:18:22.086] [bmv2] [D] [thread 5453] resetting PRE state
+[10:18:22.142] [bmv2] [T] [thread 5458] mirroring_sesssion_add
+[10:18:22.149] [bmv2] [T] [thread 5463] bm_get_config
+[10:18:22.153] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.154] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.154] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.154] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.155] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.155] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.155] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.155] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.155] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.156] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.156] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.156] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.156] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.156] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.157] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.157] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.157] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.158] [bmv2] [T] [thread 5463] bm_mt_get_entries
+[10:18:22.158] [bmv2] [T] [thread 5463] bm_mt_get_entries
