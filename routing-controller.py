@@ -126,6 +126,16 @@ class RoutingController(object):
             ports.append(self.topo.node_to_node_port_num(sw_name, tunnel[index + 1]))
         return ports
 
+    def get_all_tunnel_ports(self, sw_name):
+        ports = []
+        for tunnel in self.tunnel_list:
+            if sw_name in tunnel:
+                ports_t = self.get_tunnel_ports(tunnel, sw_name)
+                for port in ports_t:
+                    if not port in ports:
+                        ports.append(port)
+        return ports
+
     def get_pwid(self, sw_name):
         pwid_dic = {}
         for host in self.topo.get_hosts_connected_to(sw_name):
@@ -146,10 +156,12 @@ class RoutingController(object):
         ### logic to be executed at the start-up of the topology
         ### hint: compute ECMP paths here
         ### use exercise 08-Simple Routing as a reference
-        # PE
+
+        # PE Part
         for pe in self.pe_list:
             for ingress_port in self.get_pwid(pe).keys():
                 pw_id = self.get_pwid(pe)[ingress_port]
+
                 # encap_forward_with_tunnel
                 for another_pe in self.pe_list:
                     if pe == another_pe:
@@ -167,7 +179,47 @@ class RoutingController(object):
                                 tunnel_id = self.tunnel_list.index(tunnel) + 1
                                 egress_spec = self.get_tunnel_ports(tunnel, pe)[0]
                                 self.controllers[pe].table_add('encap_forward_with_tunnel', 'encap_forward_with_tunnel_act', [str(ingress_port), str(dst_mac)], [str(egress_spec), str(tunnel_id), str(pw_id)])
+
+                # direct_forward_without_tunnel
+                for host in self.topo.get_hosts_connected_to(pe):
+                    if self.topo.node_to_node_port_num(pe, host) == ingress_port or self.get_pwid(pe)[self.topo.node_to_node_port_num(pe, host)] != pw_id:
+                        continue
+                    else:
+                        dst_mac = self.topo.get_host_mac(host)
+                        egress_spec = self.topo.node_to_node_port_num(pe, host)
+                        self.controllers[pe].table_add('direct_forward_without_tunnel', 'direct_forward_without_tunnel_act', [str(ingress_port), str(dst_mac)], [str(egress_spec)])
+
+            # decap_forward_with_tunnel
+            for host in self.topo.get_hosts_connected_to(pe):
+                dst_mac = self.topo.get_host_mac(host)
+                egress_spec = self.topo.node_to_node_port_num(pe, host)
+                pw_id = self.get_pwid(pe)[egress_spec]
+                self.controllers[pe].table_add('decap_forward_with_tunnel', 'decap_forward_with_tunnel_act', [str(dst_mac), str(pw_id)], [str(egress_spec)])
+
+            # encap_multicast_egress_decap
+            for port in self.get_all_tunnel_ports(pe):
+                self.controllers[pe].table_add('encap_multicast_egress_decap', 'NoAction', [str(port)], [])
+
+        # non_PE Part
+        for non_pe in self.non_pe_list:
+            tunnel_l = []
+            tunnel_id_l = []
+            for tunnel in self.tunnel_list:
+                if non_pe in tunnel:
+                    tunnel_l.append(tunnel)
+                    tunnel_id_l.append(self.tunnel_list.index(tunnel) + 1)
+            for index in range(len(tunnel_l)):
+                tunnel = tunnel_l[index]
+                tunnel_id = tunnel_id_l[index]
+                ports = self.get_tunnel_ports(tunnel, non_pe)
+                self.controllers[non_pe].table_add('direct_forward_with_tunnel', 'direct_forward_with_tunnel_act', [str(ports[0]), str(tunnel_id)], [str(ports[1])])
+                self.controllers[non_pe].table_add('direct_forward_with_tunnel', 'direct_forward_with_tunnel_act', [str(ports[1]), str(tunnel_id)], [str(ports[0])])
         
+             # encap_multicast_egress_decap
+            for port in self.get_all_tunnel_ports(non_pe):
+                self.controllers[non_pe].table_add('encap_multicast_egress_decap', 'NoAction', [str(port)], [])
+
+
         print '=====tunnel_list below====='
         print self.tunnel_list
 
