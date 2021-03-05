@@ -136,6 +136,14 @@ class RoutingController(object):
                         ports.append(port)
         return ports
 
+    def get_port_tunnels(self, port, sw_name):
+        tunnels = []
+        for tunnel in self.tunnel_list:
+            if sw_name in tunnel:
+                if port in self.get_tunnel_ports(tunnel, sw_name):
+                    tunnels.append(tunnel)
+        return tunnels
+
     def get_all_non_tunnel_ports(self, sw_name):
         ports = []
         for host in self.topo.get_hosts_connected_to(sw_name):
@@ -206,6 +214,52 @@ class RoutingController(object):
             for port in self.get_all_tunnel_ports(pe):
                 self.controllers[pe].table_add('encap_multicast_egress_decap', 'NoAction', [str(port)], [])
 
+            # multicast
+            tunnel_handle_num = 0
+            for tunnel_port in self.get_all_tunnel_ports(pe):
+                for tunnel in self.get_port_tunnels(tunnel_port, pe):
+                    tunnel_id = self.tunnel_list.index(tunnel) + 1
+                    node_port = []
+                    node_port.append(tunnel_port)
+                    self.controllers[pe].mc_node_create(tunnel_id, node_port)
+                    tunnel_handle_num += 1
+            for tunnel_port in self.get_all_tunnel_ports(pe):
+                for tunnel in self.get_port_tunnels(tunnel_port, pe):
+                    tunnel_id = self.tunnel_list.index(tunnel) + 1
+                    node_port = []
+                    node_port.append(tunnel_port)
+                    self.controllers[pe].mc_node_create(tunnel_id, node_port)
+                    
+            
+            non_tunnel_ports_1 = []
+            non_tunnel_ports_2 = []
+            for non_tunnel_port in self.get_all_non_tunnel_ports(pe):
+                if self.get_pwid(pe)[non_tunnel_port] == 1:
+                    non_tunnel_ports_1.append(non_tunnel_port)
+                elif self.get_pwid(pe)[non_tunnel_port] == 2:
+                    non_tunnel_ports_2.append(non_tunnel_port)
+
+            for index in range(4):
+                self.controllers[pe].mc_mgrp_create(index + 1)
+
+            for index in range(2):
+                self.controllers[pe].mc_node_create(0, non_tunnel_ports_1)
+                self.controllers[pe].mc_node_create(0, non_tunnel_ports_2)
+            
+            for index in range(tunnel_handle_num):
+                self.controllers[pe].mc_node_associate(1, index)
+                self.controllers[pe].mc_node_associate(2, index + tunnel_handle_num)
+            self.controllers[pe].mc_node_associate(1, tunnel_handle_num * 2)
+            self.controllers[pe].mc_node_associate(2, tunnel_handle_num * 2 + 1)
+            self.controllers[pe].mc_node_associate(3, tunnel_handle_num * 2 + 2)
+            self.controllers[pe].mc_node_associate(4, tunnel_handle_num * 2 + 3)
+            
+
+            
+
+
+
+
         # non_PE Part
         for non_pe in self.non_pe_list:
             tunnel_l = []
@@ -228,10 +282,10 @@ class RoutingController(object):
         print '=====tunnel_list below====='
         print self.tunnel_list
         # print '====something test below===='
-        # for sw_name in self.topo.get_p4switches().keys():
-        #     print str(sw_name) + ': ' + str(self.get_all_non_tunnel_ports(sw_name))
-
-
+        # for port in self.get_all_tunnel_ports('s1'):
+        #     print 's1-' + str(port) + ': ' + str(self.get_port_tunnels(port, 's1'))
+        # for port in self.get_all_tunnel_ports('s2'):
+        #     print 's2-' + str(port) + ': ' + str(self.get_port_tunnels(port, 's2'))
 
 if __name__ == "__main__":
     import sys
