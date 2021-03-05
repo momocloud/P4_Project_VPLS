@@ -136,6 +136,12 @@ class RoutingController(object):
                         ports.append(port)
         return ports
 
+    def get_all_non_tunnel_ports(self, sw_name):
+        ports = []
+        for host in self.topo.get_hosts_connected_to(sw_name):
+            ports.append(self.topo.node_to_node_port_num(sw_name, host))
+        return ports
+
     def get_pwid(self, sw_name):
         pwid_dic = {}
         for host in self.topo.get_hosts_connected_to(sw_name):
@@ -221,6 +227,9 @@ class RoutingController(object):
 
         print '=====tunnel_list below====='
         print self.tunnel_list
+        # print '====something test below===='
+        # for sw_name in self.topo.get_p4switches().keys():
+        #     print str(sw_name) + ': ' + str(self.get_all_non_tunnel_ports(sw_name))
 
 
 
