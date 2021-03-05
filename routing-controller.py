@@ -62,6 +62,8 @@ class RoutingController(object):
         self.vpls_conf_file = vpls_conf_file
         self.name_to_tunnel = {}
         self.tunnel_list = []
+        self.pe_list = []
+        self.non_pe_list = []
         self.init()
 
     def init(self):
@@ -70,6 +72,7 @@ class RoutingController(object):
         self.add_mirror()
         self.extract_customers_information()
         self.gen_tunnel()
+        self.get_pe_list()
         self.switch_to_id = {sw_name:self.get_switch_id(sw_name) for sw_name in self.topo.get_p4switches().keys()}
         self.id_to_switch = {self.get_switch_id(sw_name):sw_name for sw_name in self.topo.get_p4switches().keys()}
 
@@ -132,15 +135,50 @@ class RoutingController(object):
                 pwid_dic.update({self.topo.node_to_node_port_num(sw_name, host): 2})
         return pwid_dic
 
-
+    def get_pe_list(self):
+        for sw_name in self.topo.get_p4switches().keys():
+            if len(self.topo.get_hosts_connected_to(sw_name)) > 0 :
+                self.pe_list.append(sw_name)
+            elif len(self.topo.get_hosts_connected_to(sw_name)) == 0 :
+                self.non_pe_list.append(sw_name)
 
     def process_network(self):
         ### logic to be executed at the start-up of the topology
         ### hint: compute ECMP paths here
         ### use exercise 08-Simple Routing as a reference
+        # PE
+        for pe in self.pe_list:
+            for ingress_port in self.get_pwid(pe).keys():
+                pw_id = self.get_pwid(pe)[ingress_port]
+                # encap_forward_with_tunnel
+                for another_pe in self.pe_list:
+                    if pe == another_pe:
+                        continue
+                    else:
+                        for host in self.topo.get_hosts_connected_to(another_pe):
+                            if self.get_pwid(another_pe)[self.topo.node_to_node_port_num(another_pe, host)] != pw_id:
+                                continue
+                            else:
+                                dst_mac = self.topo.get_host_mac(host)
+                                tunnel_l = self.name_to_tunnel.get((pe, another_pe), None)
+                                if tunnel_l is None:
+                                    tunnel_l = self.name_to_tunnel[another_pe, pe]
+                                tunnel = tunnel_l[0]
+                                tunnel_id = self.tunnel_list.index(tunnel) + 1
+                                egress_spec = self.get_tunnel_ports(tunnel, pe)[0]
+                                self.controllers[pe].table_add('encap_forward_with_tunnel', 'encap_forward_with_tunnel_act', [str(ingress_port), str(dst_mac)], [str(egress_spec), str(tunnel_id), str(pw_id)])
+        
+        print '=====tunnel_list below====='
+        print self.tunnel_list
 
-        for sw_name in self.topo.get_p4switches().keys():
-            print str(sw_name) + ': ' + str(self.get_pwid(sw_name))
+                            
+            # for another_pe in self.pe_list:
+            #     if another_pe == another_pe:
+            #         continue
+            #     else:
+            #         for host in self.topo.get_hosts_connected_to(another_pe):
+
+
 
 if __name__ == "__main__":
     import sys
