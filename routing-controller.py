@@ -222,13 +222,8 @@ class RoutingController(object):
 
         print '=====tunnel_list below====='
         print self.tunnel_list
-
-                            
-            # for another_pe in self.pe_list:
-            #     if another_pe == another_pe:
-            #         continue
-            #     else:
-            #         for host in self.topo.get_hosts_connected_to(another_pe):
+        print '=========='
+        print self.non_pe_list
 
 
 
