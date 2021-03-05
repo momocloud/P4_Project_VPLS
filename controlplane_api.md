@@ -93,3 +93,16 @@ for sw_name in self.topo.get_p4switches().keys():
 # s5: [4, 3]
 # s4: [4, 3]
 ```
+
+`get_all_non_tunnel_ports(self, sw_name)`: 返回sw_name的所有不在隧道中的端口列表。用例：
+```python
+for sw_name in self.topo.get_p4switches().keys():
+    print str(sw_name) + ': ' + str(self.get_all_non_tunnel_ports(sw_name))
+
+# 打印结果：
+# s3: []
+# s2: []
+# s1: [1, 2]
+# s5: [1, 2]
+# s4: [2, 1]
+```
