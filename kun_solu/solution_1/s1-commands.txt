@@ -19,4 +19,3 @@ table_add encap_multicast encap_multicast_act 1 => 1 1
 table_add encap_multicast encap_multicast_act 2 => 1 1
 table_add encap_multicast encap_multicast_act 3 => 2 2
 table_add encap_multicast encap_multicast_act 4 => 2 2
-table_add encap_multicast_egress_decap encap_multicast_egress_decap_act 
