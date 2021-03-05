@@ -219,11 +219,8 @@ class RoutingController(object):
             for port in self.get_all_tunnel_ports(non_pe):
                 self.controllers[non_pe].table_add('encap_multicast_egress_decap', 'NoAction', [str(port)], [])
 
-
         print '=====tunnel_list below====='
         print self.tunnel_list
-        print '=========='
-        print self.non_pe_list
 
 
 
