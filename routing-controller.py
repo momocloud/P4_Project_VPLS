@@ -173,6 +173,8 @@ class RoutingController(object):
 
         # PE Part
         for pe in self.pe_list:
+            ecmp_group_information = {}
+            ecmp_group_count = 1
             for ingress_port in self.get_pwid(pe).keys():
                 pw_id = self.get_pwid(pe)[ingress_port]
 
@@ -194,6 +196,21 @@ class RoutingController(object):
                                 egress_spec = self.get_tunnel_ports(tunnel, pe)[0]
                                 self.controllers[pe].table_add('encap_forward_with_tunnel', 'encap_forward_with_tunnel_act', [str(ingress_port), str(dst_mac)], [str(egress_spec), str(tunnel_id), str(pw_id)])
 
+                                # ecmp
+                                if len(tunnel_l) > 1:
+                                    ecmp_group_information.update({ecmp_group_count: (tunnel_l, pw_id)})
+                                    self.controllers[pe].table_add('ecmp_group', 'ecmp_group_act', [str(ingress_port), str(dst_mac)], [str(ecmp_group_count), str(len(tunnel_l))])
+                                    ecmp_group_count += 1
+                
+                for group_id in ecmp_group_information.keys():
+                    tunnel_l = ecmp_group_information[group_id][0]
+                    pw_id = ecmp_group_information[group_id][1]
+                    for hash_value in range(len(tunnel_l)):
+                        tunnel = tunnel_l[hash_value]
+                        tunnel_id = self.tunnel_list.index(tunnel) + 1
+                        egress_spec = self.get_tunnel_ports(tunnel, pe)[0]
+                        self.controllers[pe].table_add('ecmp_forward', 'encap_forward_with_tunnel_act', [str(group_id), str(hash_value)], [str(egress_spec), str(tunnel_id), str(pw_id)])
+
                 # direct_forward_without_tunnel
                 for host in self.topo.get_hosts_connected_to(pe):
                     if self.topo.node_to_node_port_num(pe, host) == ingress_port or self.get_pwid(pe)[self.topo.node_to_node_port_num(pe, host)] != pw_id:
@@ -202,6 +219,7 @@ class RoutingController(object):
                         dst_mac = self.topo.get_host_mac(host)
                         egress_spec = self.topo.node_to_node_port_num(pe, host)
                         self.controllers[pe].table_add('direct_forward_without_tunnel', 'direct_forward_without_tunnel_act', [str(ingress_port), str(dst_mac)], [str(egress_spec)])
+
 
             # decap_forward_with_tunnel
             for host in self.topo.get_hosts_connected_to(pe):
@@ -230,7 +248,6 @@ class RoutingController(object):
                     node_port.append(tunnel_port)
                     self.controllers[pe].mc_node_create(tunnel_id, node_port)
                     
-            
             non_tunnel_ports_1 = []
             non_tunnel_ports_2 = []
             for non_tunnel_port in self.get_all_non_tunnel_ports(pe):
@@ -238,14 +255,12 @@ class RoutingController(object):
                     non_tunnel_ports_1.append(non_tunnel_port)
                 elif self.get_pwid(pe)[non_tunnel_port] == 2:
                     non_tunnel_ports_2.append(non_tunnel_port)
-
             for index in range(4):
                 self.controllers[pe].mc_mgrp_create(index + 1)
-
             for index in range(2):
                 self.controllers[pe].mc_node_create(0, non_tunnel_ports_1)
                 self.controllers[pe].mc_node_create(0, non_tunnel_ports_2)
-            
+
             for index in range(tunnel_handle_num):
                 self.controllers[pe].mc_node_associate(1, index)
                 self.controllers[pe].mc_node_associate(2, index + tunnel_handle_num)
@@ -253,11 +268,15 @@ class RoutingController(object):
             self.controllers[pe].mc_node_associate(2, tunnel_handle_num * 2 + 1)
             self.controllers[pe].mc_node_associate(3, tunnel_handle_num * 2 + 2)
             self.controllers[pe].mc_node_associate(4, tunnel_handle_num * 2 + 3)
-            
 
-            
-
-
+            for ingress_port in self.get_all_non_tunnel_ports(pe):
+                pw_id = self.get_pwid(pe)[ingress_port]
+                if pw_id == 1:
+                    self.controllers[pe].table_add('encap_multicast', 'encap_multicast_act', [str(ingress_port)], ['1', str(pw_id)])
+                elif pw_id == 2:
+                    self.controllers[pe].table_add('encap_multicast', 'encap_multicast_act', [str(ingress_port)], ['2', str(pw_id)])
+            self.controllers[pe].table_add('decap_multicast', 'decap_multicast_act', ['1'], ['3'])
+            self.controllers[pe].table_add('decap_multicast', 'decap_multicast_act', ['2'], ['4'])
 
 
         # non_PE Part
