@@ -9,7 +9,7 @@ import itertools
 
 class CpuHeader(Packet):
     name = 'CpuPacket'
-    ### define your own CPU header
+    # fields_desc = [BitField('macAddr', 0, 48), BitField('tunnel_id', 0, 16), BitField('pw_id_or_ingress_port', 0, 16)]
 
 class RttHeader(Packet):
     name = 'RttPacket'
@@ -23,6 +23,7 @@ class EventBasedController(threading.Thread):
         self.cpu_port_intf = params["cpu_port_intf"]
         self.thrift_port = params["thrift_port"]
         self.id_to_switch = params["id_to_switch"]
+        self.whole_controller = params["whole_controller"]
         self.controller = SimpleSwitchAPI(thrift_port)
 
     def run(self):
@@ -324,6 +325,7 @@ if __name__ == "__main__":
         params["cpu_port_intf"]= cpu_port_intf 
         params["thrift_port"]= thrift_port
         params["id_to_switch"]= id_to_switch
+        params["whole_controller"] = controller
         thread = EventBasedController(params )
         thread.setName('MyThread ' + str(sw_name))
         thread.daemon = True
