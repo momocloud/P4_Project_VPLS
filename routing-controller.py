@@ -9,7 +9,7 @@ import itertools
 
 class CpuHeader(Packet):
     name = 'CpuPacket'
-    # fields_desc = [BitField('macAddr', 0, 48), BitField('tunnel_id', 0, 16), BitField('pw_id_or_ingress_port', 0, 16)]
+    fields_desc = [BitField('macAddr', 0, 48), BitField('tunnel_id', 0, 16), BitField('pw_id_or_ingress_port', 0, 16)]
 
 class RttHeader(Packet):
     name = 'RttPacket'
@@ -36,7 +36,7 @@ class EventBasedController(threading.Thread):
 
         if packet.type == 0x1234:
             cpu_header = CpuHeader(packet.payload)
-            self.process_packet([(None)]) ### change None with the list of fields from the CPUHeader that you defined
+            self.process_packet([(cpu_header.macAddr, cpu_header.tunnel_id, cpu_header.pw_id_or_ingress_port)]) ### change None with the list of fields from the CPUHeader that you defined
         elif packet.type == 0x5678:
             rtt_header = RttHeader(packet.payload)
             self.process_packet_rtt([(rtt_header.customer_id,rtt_header.ip_addr_src,rtt_header.ip_addr_dst,rtt_header.rtt)])
@@ -44,7 +44,26 @@ class EventBasedController(threading.Thread):
     def process_packet(self, packet_data):
         ### write your learning logic here
         ### use exercise 04-Learning as a reference point
-        pass
+        for macAddr, tunnel_id, pw_id_or_ingress_port in packet_data:
+            # non-tunnel packets
+            if tunnel_id == 0:
+                egress_spec = pw_id_or_ingress_port
+                pw_id = self.whole_controller.get_pwid(self.sw_name)[egress_spec]
+                # direct_forward_without_tunnel
+                for ingress_port in self.whole_controller.get_all_non_tunnel_ports(self.sw_name):
+                    if ingress_port == egress_spec or self.whole_controller.get_pwid(self.sw_name)[ingress_port] != pw_id:
+                        continue
+                    else:
+                        self.controller.table_add('direct_forward_without_tunnel', 'direct_forward_without_tunnel_act', [str(ingress_port), str(macAddr)], [str(egress_spec)])
+                # decap_forward_with_tunnel
+                self.controller.table_add('decap_forward_with_tunnel', 'decap_forward_with_tunnel_act', [str(macAddr), str(pw_id)], [str(egress_spec)])
+
+            # tunnel packets
+            else:
+                pw_id = pw_id_or_ingress_port
+                tunnel = self.whole_controller.tunnel_list.index(tunnel_id - 1)
+
+
 
     def process_packet_rtt(self, packet_data):
         for customer_id, ip_addr_src, ip_addr_dst, rtt in packet_data:
