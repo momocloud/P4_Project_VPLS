@@ -25,6 +25,7 @@ class EventBasedController(threading.Thread):
         self.id_to_switch = params["id_to_switch"]
         self.whole_controller = params["whole_controller"]
         self.controller = SimpleSwitchAPI(thrift_port)
+        self.ecmp_group_count = 1
 
     def run(self):
         sniff(iface=self.cpu_port_intf, prn=self.recv_msg_cpu)
@@ -62,8 +63,36 @@ class EventBasedController(threading.Thread):
             else:
                 pw_id = pw_id_or_ingress_port
                 tunnel = self.whole_controller.tunnel_list.index(tunnel_id - 1)
-
-
+                # encap_forward_with_tunnel
+                for ingress_port in self.whole_controller.get_all_non_tunnel_ports(self.sw_name):
+                    if self.whole_controller.get_pwid(self.sw_name)[ingress_port] != pw_id:
+                        continue
+                    else:
+                        egress_spec = self.whole_controller.get_tunnel_ports(tunnel, self.sw_name)
+                        self.controller.table_add('encap_forward_with_tunnel', 'encap_forward_with_tunnel_act', [str(ingress_port), str(macAddr)], [str(egress_spec), str(tunnel_id), str(pw_id)])
+                # ecmp
+                the_other_pe = self.sw_name
+                for pe_pair in self.whole_controller.name_to_tunnel.keys():
+                    if tunnel in self.whole_controller.name_to_tunnel[pe_pair]:
+                        for pe in pe_pair:
+                            if pe == self.sw_name:
+                                continue
+                            else:
+                                the_other_pe = pe
+                tunnel_l = self.whole_controller.name_to_tunnel.get((self.sw_name, the_other_pe), None)
+                if tunnel_l == None:
+                    tunnel_l = self.whole_controller.name_to_tunnel[(the_other_pe, self.sw_name)]
+                if len(tunnel_l) > 1:
+                    for ingress_port in self.whole_controller.get_all_non_tunnel_ports(self.sw_name):
+                        if self.whole_controller.get_pwid(self.sw_name)[ingress_port] != pw_id:
+                            continue
+                        else:
+                            self.controller.table_add('ecmp_group', 'ecmp_group_act', [str(ingress_port), str(macAddr)], [str(self.ecmp_group_count), str(len(tunnel_l))])
+                    for hash_value in range(len(tunnel_l)):
+                        tunnel_ecmp = tunnel_l[hash_value]
+                        tunnel_id_ecmp = self.whole_controller.tunnel_list.index(tunnel_ecmp) + 1
+                        egress_spec = self.whole_controller.get_tunnel_ports(tunnel_ecmp, self.sw_name)
+                        self.controller.table_add('ecmp_forward', 'encap_forward_with_tunnel_act', [str(self.ecmp_group_count), str(hash_value)], [str(egress_spec), str(tunnel_id_ecmp), str(pw_id)])
 
     def process_packet_rtt(self, packet_data):
         for customer_id, ip_addr_src, ip_addr_dst, rtt in packet_data:
