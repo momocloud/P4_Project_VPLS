@@ -222,8 +222,7 @@ class RoutingController(object):
 
         # PE Part
         for pe in self.pe_list:
-            ecmp_group_information = {}
-            ecmp_group_count = 1
+            group_id = 0
             for ingress_port in self.get_pwid(pe).keys():
                 pw_id = self.get_pwid(pe)[ingress_port]
 
@@ -247,18 +246,14 @@ class RoutingController(object):
 
                                 # ecmp
                                 if len(tunnel_l) > 1:
-                                    ecmp_group_information.update({ecmp_group_count: (tunnel_l, pw_id)})
-                                    self.controllers[pe].table_add('ecmp_group', 'ecmp_group_act', [str(ingress_port), str(dst_mac)], [str(ecmp_group_count), str(len(tunnel_l))])
-                                    ecmp_group_count += 1
-                
-                for group_id in ecmp_group_information.keys():
-                    tunnel_l = ecmp_group_information[group_id][0]
-                    pw_id = ecmp_group_information[group_id][1]
-                    for hash_value in range(len(tunnel_l)):
-                        tunnel = tunnel_l[hash_value]
-                        tunnel_id = self.tunnel_list.index(tunnel) + 1
-                        egress_spec = self.get_tunnel_ports(tunnel, pe)[0]
-                        self.controllers[pe].table_add('ecmp_forward', 'encap_forward_with_tunnel_act', [str(group_id), str(hash_value)], [str(egress_spec), str(tunnel_id), str(pw_id)])
+                                    group_id += 1
+                                    print "table_add_at {}:".format(pe)
+                                    self.controllers[pe].table_add('ecmp_group', 'ecmp_group_act', [str(ingress_port), str(dst_mac)], [str(group_id), str(len(tunnel_l))])
+                                    for hash in range(len(tunnel_l)):
+                                        tunnel = tunnel_l[hash]
+                                        tunnel_id = self.tunnel_list.index(tunnel) + 1
+                                        egress_spec = self.get_tunnel_ports(tunnel, pe)[0]
+                                        self.controllers[pe].table_add('ecmp_forward', 'encap_forward_with_tunnel_act', [str(group_id), str(hash)], [str(egress_spec), str(tunnel_id), str(pw_id)])
 
                 # direct_forward_without_tunnel
                 for host in self.topo.get_hosts_connected_to(pe):
