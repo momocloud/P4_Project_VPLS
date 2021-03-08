@@ -45,10 +45,12 @@ class EventBasedController(threading.Thread):
     def process_packet(self, packet_data):
         ### write your learning logic here
         ### use exercise 04-Learning as a reference point
-        if self.topo.get_hosts_connected_to(self.sw_name) == []:
-            return
+
         for macAddr, tunnel_id, pw_id_or_ingress_port in packet_data:
-            self.controller.table_add('smac', 'NoAction', [str(macAddr)], [])
+            if self.topo.get_hosts_connected_to(self.sw_name) == []:
+                for port in self.whole_controller.get_all_tunnel_ports(self.sw_name):
+                    self.controller.table_add('smac', 'NoAction', [str(macAddr), str(port)], [])
+                return
             # non-tunnel packets
             if tunnel_id == 0:
                 egress_spec = pw_id_or_ingress_port
@@ -58,22 +60,27 @@ class EventBasedController(threading.Thread):
                     if ingress_port == egress_spec or self.whole_controller.get_pwid(self.sw_name)[ingress_port] != pw_id:
                         continue
                     else:
+                        print self.sw_name
                         self.controller.table_add('direct_forward_without_tunnel', 'direct_forward_without_tunnel_act', [str(ingress_port), str(macAddr)], [str(egress_spec)])
                 # decap_forward_with_tunnel
+                print self.sw_name
                 self.controller.table_add('decap_forward_with_tunnel', 'decap_forward_with_tunnel_act', [str(macAddr), str(pw_id)], [str(egress_spec)])
+                self.controller.table_add('no_learning', 'drop_2', [str(macAddr), str(tunnel_id), str(egress_spec)], [])
 
             # tunnel packets
             else:
                 pw_id = pw_id_or_ingress_port
                 tunnel = self.whole_controller.tunnel_list[tunnel_id - 1]
+                # self.controller.table_add('no_learning', 'drop_2', [str(macAddr), str(tunnel_id), str(pw_id)], [])
                 # encap_forward_with_tunnel
                 for ingress_port in self.whole_controller.get_all_non_tunnel_ports(self.sw_name):
                     if self.whole_controller.get_pwid(self.sw_name)[ingress_port] != pw_id:
                         continue
                     else:
                         egress_spec = self.whole_controller.get_tunnel_ports(tunnel, self.sw_name)[0]
+                        print self.sw_name
                         self.controller.table_add('encap_forward_with_tunnel', 'encap_forward_with_tunnel_act', [str(ingress_port), str(macAddr)], [str(egress_spec), str(tunnel_id), str(pw_id)])
-                # ecmp
+                # # ecmp
                 the_other_pe = self.sw_name
                 for pe_pair in self.whole_controller.name_to_tunnel.keys():
                     if tunnel in self.whole_controller.name_to_tunnel[pe_pair]:
@@ -90,12 +97,16 @@ class EventBasedController(threading.Thread):
                         if self.whole_controller.get_pwid(self.sw_name)[ingress_port] != pw_id:
                             continue
                         else:
+                            print self.sw_name
                             self.controller.table_add('ecmp_group', 'ecmp_group_act', [str(ingress_port), str(macAddr)], [str(self.ecmp_group_count), str(len(tunnel_l))])
                     for hash_value in range(len(tunnel_l)):
                         tunnel_ecmp = tunnel_l[hash_value]
                         tunnel_id_ecmp = self.whole_controller.tunnel_list.index(tunnel_ecmp) + 1
                         egress_spec = self.whole_controller.get_tunnel_ports(tunnel_ecmp, self.sw_name)[0]
+                        print self.sw_name
                         self.controller.table_add('ecmp_forward', 'encap_forward_with_tunnel_act', [str(self.ecmp_group_count), str(hash_value)], [str(egress_spec), str(tunnel_id_ecmp), str(pw_id)])
+                        self.controller.table_add('no_learning', 'drop_2', [str(macAddr), str(tunnel_id_ecmp), str(pw_id)], [])
+                    self.ecmp_group_count += 1
 
     def process_packet_rtt(self, packet_data):
         for customer_id, ip_addr_src, ip_addr_dst, rtt in packet_data:
@@ -225,55 +236,55 @@ class RoutingController(object):
 
         # PE Part
         for pe in self.pe_list:
-            group_id = 0
+            # group_id = 0
             for ingress_port in self.get_pwid(pe).keys():
                 pw_id = self.get_pwid(pe)[ingress_port]
 
                 # encap_forward_with_tunnel
-                for another_pe in self.pe_list:
-                    if pe == another_pe:
-                        continue
-                    else:
-                        for host in self.topo.get_hosts_connected_to(another_pe):
-                            if self.get_pwid(another_pe)[self.topo.node_to_node_port_num(another_pe, host)] != pw_id:
-                                continue
-                            else:
-                                dst_mac = self.topo.get_host_mac(host)
-                                tunnel_l = self.name_to_tunnel.get((pe, another_pe), None)
-                                if tunnel_l is None:
-                                    tunnel_l = self.name_to_tunnel[another_pe, pe]
-                                tunnel = tunnel_l[0]
-                                tunnel_id = self.tunnel_list.index(tunnel) + 1
-                                egress_spec = self.get_tunnel_ports(tunnel, pe)[0]
-                                self.controllers[pe].table_add('encap_forward_with_tunnel', 'encap_forward_with_tunnel_act', [str(ingress_port), str(dst_mac)], [str(egress_spec), str(tunnel_id), str(pw_id)])
+                # for another_pe in self.pe_list:
+                #     if pe == another_pe:
+                #         continue
+                #     else:
+                #         for host in self.topo.get_hosts_connected_to(another_pe):
+                #             if self.get_pwid(another_pe)[self.topo.node_to_node_port_num(another_pe, host)] != pw_id:
+                #                 continue
+                #             else:
+                #                 dst_mac = self.topo.get_host_mac(host)
+                #                 tunnel_l = self.name_to_tunnel.get((pe, another_pe), None)
+                #                 if tunnel_l is None:
+                #                     tunnel_l = self.name_to_tunnel[another_pe, pe]
+                #                 tunnel = tunnel_l[0]
+                #                 tunnel_id = self.tunnel_list.index(tunnel) + 1
+                #                 egress_spec = self.get_tunnel_ports(tunnel, pe)[0]
+                #                 self.controllers[pe].table_add('encap_forward_with_tunnel', 'encap_forward_with_tunnel_act', [str(ingress_port), str(dst_mac)], [str(egress_spec), str(tunnel_id), str(pw_id)])
 
-                                # ecmp
-                                if len(tunnel_l) > 1:
-                                    group_id += 1
-                                    print "table_add_at {}:".format(pe)
-                                    self.controllers[pe].table_add('ecmp_group', 'ecmp_group_act', [str(ingress_port), str(dst_mac)], [str(group_id), str(len(tunnel_l))])
-                                    for hash in range(len(tunnel_l)):
-                                        tunnel = tunnel_l[hash]
-                                        tunnel_id = self.tunnel_list.index(tunnel) + 1
-                                        egress_spec = self.get_tunnel_ports(tunnel, pe)[0]
-                                        self.controllers[pe].table_add('ecmp_forward', 'encap_forward_with_tunnel_act', [str(group_id), str(hash)], [str(egress_spec), str(tunnel_id), str(pw_id)])
+                #                 # ecmp
+                #                 if len(tunnel_l) > 1:
+                #                     group_id += 1
+                #                     print "table_add_at {}:".format(pe)
+                #                     self.controllers[pe].table_add('ecmp_group', 'ecmp_group_act', [str(ingress_port), str(dst_mac)], [str(group_id), str(len(tunnel_l))])
+                #                     for hash in range(len(tunnel_l)):
+                #                         tunnel = tunnel_l[hash]
+                #                         tunnel_id = self.tunnel_list.index(tunnel) + 1
+                #                         egress_spec = self.get_tunnel_ports(tunnel, pe)[0]
+                #                         self.controllers[pe].table_add('ecmp_forward', 'encap_forward_with_tunnel_act', [str(group_id), str(hash)], [str(egress_spec), str(tunnel_id), str(pw_id)])
 
                 # direct_forward_without_tunnel
-                for host in self.topo.get_hosts_connected_to(pe):
-                    if self.topo.node_to_node_port_num(pe, host) == ingress_port or self.get_pwid(pe)[self.topo.node_to_node_port_num(pe, host)] != pw_id:
-                        continue
-                    else:
-                        dst_mac = self.topo.get_host_mac(host)
-                        egress_spec = self.topo.node_to_node_port_num(pe, host)
-                        self.controllers[pe].table_add('direct_forward_without_tunnel', 'direct_forward_without_tunnel_act', [str(ingress_port), str(dst_mac)], [str(egress_spec)])
+            #     for host in self.topo.get_hosts_connected_to(pe):
+            #         if self.topo.node_to_node_port_num(pe, host) == ingress_port or self.get_pwid(pe)[self.topo.node_to_node_port_num(pe, host)] != pw_id:
+            #             continue
+            #         else:
+            #             dst_mac = self.topo.get_host_mac(host)
+            #             egress_spec = self.topo.node_to_node_port_num(pe, host)
+            #             self.controllers[pe].table_add('direct_forward_without_tunnel', 'direct_forward_without_tunnel_act', [str(ingress_port), str(dst_mac)], [str(egress_spec)])
 
 
-            # decap_forward_with_tunnel
-            for host in self.topo.get_hosts_connected_to(pe):
-                dst_mac = self.topo.get_host_mac(host)
-                egress_spec = self.topo.node_to_node_port_num(pe, host)
-                pw_id = self.get_pwid(pe)[egress_spec]
-                self.controllers[pe].table_add('decap_forward_with_tunnel', 'decap_forward_with_tunnel_act', [str(dst_mac), str(pw_id)], [str(egress_spec)])
+            # # decap_forward_with_tunnel
+            # for host in self.topo.get_hosts_connected_to(pe):
+            #     dst_mac = self.topo.get_host_mac(host)
+            #     egress_spec = self.topo.node_to_node_port_num(pe, host)
+            #     pw_id = self.get_pwid(pe)[egress_spec]
+            #     self.controllers[pe].table_add('decap_forward_with_tunnel', 'decap_forward_with_tunnel_act', [str(dst_mac), str(pw_id)], [str(egress_spec)])
 
             # multicast
             tunnel_handle_num = 0
