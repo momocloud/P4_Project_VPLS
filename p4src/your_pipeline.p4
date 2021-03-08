@@ -205,6 +205,7 @@ control MyIngress(inout headers hdr,
         }
         key = {
             hdr.ethernet_1.srcAddr:   exact;
+            standard_metadata.ingress_port: exact;
         }
         size = 1024;
         default_action = L2_learning;
@@ -299,21 +300,35 @@ control MyEgress(inout headers hdr,
     //     default_action = NoAction;
     // }
 
+    table no_learning{
+        key = {
+            hdr.cpu.macAddr: exact;
+            hdr.cpu.tunnel_id: exact;
+            hdr.cpu.pw_id_or_ingress_port: exact;
+        }
+        actions = {
+            NoAction;
+            drop_2;
+        }
+        size = 1024;
+        default_action = NoAction;
+    }
+
 
     apply {
         if (standard_metadata.instance_type == 1){
+            hdr.cpu.setValid();
+            hdr.cpu.macAddr = hdr.ethernet_1.srcAddr;
+            hdr.ethernet_1.etherType = L2_LEARN_ETHER_TYPE;
             if (hdr.tunnel.isValid()) {
-                hdr.cpu.setValid();
                 hdr.cpu.tunnel_id = hdr.tunnel.tunnel_id;
                 hdr.cpu.pw_id_or_ingress_port = hdr.tunnel.pw_id;
             } else {
-                hdr.cpu.setValid();
                 hdr.cpu.tunnel_id = 0;
                 hdr.cpu.pw_id_or_ingress_port = (bit <16>)meta.ingress_port;
             }
-            hdr.cpu.macAddr = hdr.ethernet_1.srcAddr;
-            hdr.ethernet_1.etherType = L2_LEARN_ETHER_TYPE;
             truncate((bit<32>)24);
+            no_learning.apply();
         }
         else if (standard_metadata.egress_rid != 0) {
             hdr.ethernet_2.setValid();
