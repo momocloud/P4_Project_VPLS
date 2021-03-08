@@ -45,7 +45,10 @@ class EventBasedController(threading.Thread):
     def process_packet(self, packet_data):
         ### write your learning logic here
         ### use exercise 04-Learning as a reference point
+        if self.topo.get_hosts_connected_to(self.sw_name) == []:
+            return
         for macAddr, tunnel_id, pw_id_or_ingress_port in packet_data:
+            self.controller.table_add('smac', 'NoAction', [str(macAddr)], [])
             # non-tunnel packets
             if tunnel_id == 0:
                 egress_spec = pw_id_or_ingress_port
@@ -62,13 +65,13 @@ class EventBasedController(threading.Thread):
             # tunnel packets
             else:
                 pw_id = pw_id_or_ingress_port
-                tunnel = self.whole_controller.tunnel_list.index(tunnel_id - 1)
+                tunnel = self.whole_controller.tunnel_list[tunnel_id - 1]
                 # encap_forward_with_tunnel
                 for ingress_port in self.whole_controller.get_all_non_tunnel_ports(self.sw_name):
                     if self.whole_controller.get_pwid(self.sw_name)[ingress_port] != pw_id:
                         continue
                     else:
-                        egress_spec = self.whole_controller.get_tunnel_ports(tunnel, self.sw_name)
+                        egress_spec = self.whole_controller.get_tunnel_ports(tunnel, self.sw_name)[0]
                         self.controller.table_add('encap_forward_with_tunnel', 'encap_forward_with_tunnel_act', [str(ingress_port), str(macAddr)], [str(egress_spec), str(tunnel_id), str(pw_id)])
                 # ecmp
                 the_other_pe = self.sw_name
@@ -91,7 +94,7 @@ class EventBasedController(threading.Thread):
                     for hash_value in range(len(tunnel_l)):
                         tunnel_ecmp = tunnel_l[hash_value]
                         tunnel_id_ecmp = self.whole_controller.tunnel_list.index(tunnel_ecmp) + 1
-                        egress_spec = self.whole_controller.get_tunnel_ports(tunnel_ecmp, self.sw_name)
+                        egress_spec = self.whole_controller.get_tunnel_ports(tunnel_ecmp, self.sw_name)[0]
                         self.controller.table_add('ecmp_forward', 'encap_forward_with_tunnel_act', [str(self.ecmp_group_count), str(hash_value)], [str(egress_spec), str(tunnel_id_ecmp), str(pw_id)])
 
     def process_packet_rtt(self, packet_data):
@@ -272,10 +275,6 @@ class RoutingController(object):
                 pw_id = self.get_pwid(pe)[egress_spec]
                 self.controllers[pe].table_add('decap_forward_with_tunnel', 'decap_forward_with_tunnel_act', [str(dst_mac), str(pw_id)], [str(egress_spec)])
 
-            # encap_multicast_egress_decap
-            for port in self.get_all_tunnel_ports(pe):
-                self.controllers[pe].table_add('encap_multicast_egress_decap', 'NoAction', [str(port)], [])
-
             # multicast
             tunnel_handle_num = 0
             for tunnel_port in self.get_all_tunnel_ports(pe):
@@ -337,10 +336,6 @@ class RoutingController(object):
                 ports = self.get_tunnel_ports(tunnel, non_pe)
                 self.controllers[non_pe].table_add('direct_forward_with_tunnel', 'direct_forward_with_tunnel_act', [str(ports[0]), str(tunnel_id)], [str(ports[1])])
                 self.controllers[non_pe].table_add('direct_forward_with_tunnel', 'direct_forward_with_tunnel_act', [str(ports[1]), str(tunnel_id)], [str(ports[0])])
-        
-             # encap_multicast_egress_decap
-            for port in self.get_all_tunnel_ports(non_pe):
-                self.controllers[non_pe].table_add('encap_multicast_egress_decap', 'NoAction', [str(port)], [])
 
         print '=====tunnel_list below====='
         print self.tunnel_list
