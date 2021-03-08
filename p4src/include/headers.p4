@@ -59,6 +59,9 @@ header tcp_t{
 }
 
 header cpu_t{
+    macAddr_t macAddr;
+    tunnel_id_t tunnel_id;
+    pw_id_t pw_id_or_ingress_port;
 }
 
 header rtt_t{
@@ -69,17 +72,19 @@ header rtt_t{
 }
 
 struct metadata {
+    egressSpec_t ingress_port;
     bit<14> ecmp_hash;
     bit<14> ecmp_group_id;
+    bit<16> pw_id;
 }
 
 struct headers {
     ethernet_t   ethernet_1;
+    cpu_t        cpu;
     tunnel_t     tunnel;
     ethernet_t   ethernet_2;
     ipv4_t 		 ipv4;
     tcp_t        tcp;
-    cpu_t        cpu;
     rtt_t        rtt;
 }
 

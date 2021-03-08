@@ -2,7 +2,7 @@
 #include <core.p4>
 #include <v1model.p4>
 
-//My includes 
+//My includes
 #include "include/headers.p4"
 #include "include/parsers.p4"
 
@@ -25,11 +25,11 @@ control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
 
-    // basic forward 
+    // basic forward
     //       |
-    //       | 
+    //       |
     //       v
-    
+
     action drop() {
         mark_to_drop(standard_metadata);
     }
@@ -121,9 +121,9 @@ control MyIngress(inout headers hdr,
         default_action = decrease_ipv4_ttl;
     }
 
-    // ecmp 
+    // ecmp
     //   |
-    //   | 
+    //   |
     //   v
 
     action ecmp_group_act(bit<14> ecmp_group_id, bit<16> num_nhops){
@@ -164,15 +164,7 @@ control MyIngress(inout headers hdr,
 
     action encap_multicast_act(bit<16> mcast_grp, pw_id_t pw_id) {
         standard_metadata.mcast_grp = mcast_grp;
-        hdr.ethernet_2.setValid();
-        hdr.tunnel.setValid();
-
-        hdr.ethernet_2 = hdr.ethernet_1;
-
-        // 封装隧道头
-        hdr.ethernet_1.etherType = TYPE_TUNNEL;
-        hdr.tunnel.tunnel_id = 0;
-        hdr.tunnel.pw_id = pw_id;
+        meta.pw_id = pw_id;
     }
 
     action decap_multicast_act(bit<16> mcast_grp) {
@@ -181,46 +173,56 @@ control MyIngress(inout headers hdr,
         hdr.tunnel.setInvalid();
         standard_metadata.mcast_grp = mcast_grp;
     }
-
-    action direct_multicast_act(bit<16> mcast_grp) {
-        standard_metadata.mcast_grp = mcast_grp;
-    }
-
-    table encap_multicast {
+    
+    table encap_multicast  {
         key = { standard_metadata.ingress_port: exact; }
         actions = { encap_multicast_act; NoAction; }
         size = 1024;
         default_action = NoAction;
     }
 
-    table decap_multicast {
+    table decap_multicast  {
         key = { hdr.tunnel.pw_id: exact; }
         actions = { decap_multicast_act; NoAction; }
         size = 1024;
         default_action = NoAction;
     }
 
-    table direct_multicast {
-        key = { standard_metadata.ingress_port: exact; }
-        actions = { direct_multicast_act; NoAction; }
+
+    // L2 learning
+    //     |
+    //     |
+    //     v
+    action L2_learning(){
+        meta.ingress_port = standard_metadata.ingress_port;
+        clone3(CloneType.I2E, 100, meta);
+    }
+
+    table smac{
+        actions = {
+            L2_learning;
+            NoAction;
+        }
+        key = {
+            hdr.ethernet_1.srcAddr:   exact;
+        }
         size = 1024;
-        default_action = NoAction;
+        default_action = L2_learning;
     }
 
     apply {
+        smac.apply();
         if (hdr.tunnel.isValid()) {
-            if (hdr.tunnel.tunnel_id != 0) {
-                direct_forward_with_tunnel.apply();
-                decap_forward_with_tunnel.apply();
-            } else {
-                direct_multicast.apply();
-                decap_multicast.apply();   
-            }
+            direct_forward_with_tunnel.apply();
+            decap_forward_with_tunnel.apply();
+            decap_multicast.apply();
         } else {
             if (direct_forward_without_tunnel.apply().hit){}
             else if (hdr.tcp.isValid() && ecmp_group.apply().hit) { ecmp_forward.apply(); }
             else if (encap_forward_with_tunnel.apply().hit) {}
-            else { encap_multicast.apply(); }
+            else {
+                encap_multicast.apply();
+            }
         }
         if (hdr.ipv4.isValid()) {
             table_ipv4.apply();
@@ -235,28 +237,93 @@ control MyIngress(inout headers hdr,
 control MyEgress(inout headers hdr,
                  inout metadata meta,
                  inout standard_metadata_t standard_metadata) {
-    
+
     action drop_2(){
         mark_to_drop(standard_metadata);
     }
 
-    action encap_multicast_egress_decap_act() {
-        hdr.ethernet_1.etherType = hdr.ethernet_2.etherType;
-        hdr.ethernet_2.setInvalid();
-        hdr.tunnel.setInvalid();
-    }
+    // multicast do encapsulation
+    //     |
+    //     |
+    //     v
 
-    table encap_multicast_egress_decap {
-        key = { standard_metadata.egress_port: exact; }
-        actions = { encap_multicast_egress_decap_act; NoAction; }
-        size = 1024;
-        default_action = encap_multicast_egress_decap_act;
-    }
+    // action do_encap_multicast(){
+    //     hdr.ethernet_2.setValid();
+    //     hdr.tunnel.setValid();
+    //     hdr.ethernet_2 = hdr.ethernet_1;
+
+    //     hdr.ethernet_1.etherType = TYPE_TUNNEL;
+    //     hdr.tunnel.tunnel_id = standard_metadata.egress_rid;
+    //     hdr.tunnel.pw_id = meta.pw_id;
+
+    // }
+    // table encap_multicast{
+    //     actions = {
+    //         do_encap_multicast;
+    //         NoAction;
+    //     }
+    //     key = {
+    //         standard_metadata.egress_rid :   exact;
+    //     }
+    //     size = 1024;
+    //     default_action = NoAction;
+    // }
+
+
+    // L2 learning
+    //     |
+    //     |
+    //     v
+    // action from_host(){
+    //     hdr.cpu.setValid();
+    //     hdr.cpu.tunnel_id = hdr.tunnel.tunnel_id;
+    //     hdr.cpu.pw_id_or_ingress_port = hdr.tunnel.pw_id;
+
+    // }
+    // action from_tunnel(){
+    //     hdr.cpu.setValid();
+    //     hdr.cpu.tunnel_id = hdr.tunnel.tunnel_id;
+    //     hdr.cpu.pw_id_or_ingress_port = (bit <16>)meta.ingress_port;
+    // }
+
+    // table cpu_encap{
+    //     actions = {
+    //         from_host;
+    //         from_tunnel;
+    //         NoAction;
+    //     }
+    //     key = {
+    //         hdr.tunnel.tunnel_id:   exact;
+    //     }
+    //     size = 1024;
+    //     default_action = NoAction;
+    // }
+
 
     apply {
-        if (hdr.tunnel.isValid()) {
-            encap_multicast_egress_decap.apply();
+        if (standard_metadata.instance_type == 1){
+            if (hdr.tunnel.isValid()) {
+                hdr.cpu.setValid();
+                hdr.cpu.tunnel_id = hdr.tunnel.tunnel_id;
+                hdr.cpu.pw_id_or_ingress_port = hdr.tunnel.pw_id;
+            } else {
+                hdr.cpu.setValid();
+                hdr.cpu.tunnel_id = 0;
+                hdr.cpu.pw_id_or_ingress_port = (bit <16>)meta.ingress_port;
+            }
+            hdr.cpu.macAddr = hdr.ethernet_1.srcAddr;
+            hdr.ethernet_1.etherType = L2_LEARN_ETHER_TYPE;
+            truncate((bit<32>)24);
         }
+        else if (standard_metadata.egress_rid != 0) {
+            hdr.ethernet_2.setValid();
+            hdr.tunnel.setValid();
+            hdr.ethernet_2 = hdr.ethernet_1;
+            hdr.ethernet_1.etherType = TYPE_TUNNEL;
+            hdr.tunnel.tunnel_id = standard_metadata.egress_rid;
+            hdr.tunnel.pw_id = meta.pw_id;
+        }
+
     }
 }
 

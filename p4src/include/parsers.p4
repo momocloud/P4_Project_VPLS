@@ -55,12 +55,11 @@ parser MyParser(packet_in packet,
 control MyDeparser(packet_out packet, in headers hdr) {
     apply {
         packet.emit(hdr.ethernet_1);
+        packet.emit(hdr.cpu);
         packet.emit(hdr.tunnel);
         packet.emit(hdr.ethernet_2);
         packet.emit(hdr.ipv4);
         packet.emit(hdr.tcp);
-
-        packet.emit(hdr.cpu);
         packet.emit(hdr.rtt); 
     }
 }
