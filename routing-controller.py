@@ -107,6 +107,8 @@ class EventBasedController(threading.Thread):
                         self.controller.table_add('ecmp_forward', 'encap_forward_with_tunnel_act', [str(self.ecmp_group_count), str(hash_value)], [str(egress_spec), str(tunnel_id_ecmp), str(pw_id)])
                         self.controller.table_add('no_learning', 'drop_2', [str(macAddr), str(tunnel_id_ecmp), str(pw_id)], [])
                     self.ecmp_group_count += 1
+                else:
+                    self.controller.table_add('no_learning', 'drop_2', [str(macAddr), str(tunnel_id), str(pw_id)], [])
 
     def process_packet_rtt(self, packet_data):
         for customer_id, ip_addr_src, ip_addr_dst, rtt in packet_data:
