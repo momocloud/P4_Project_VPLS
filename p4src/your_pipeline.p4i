@@ -1139,6 +1139,7 @@ control MyIngress(inout headers hdr,
     //     |
     //     |
     //     v
+
     action L2_learning(){
         meta.ingress_port = standard_metadata.ingress_port;
         clone3(CloneType.I2E, 100, meta);
@@ -1182,7 +1183,7 @@ control MyIngress(inout headers hdr,
 ****************  E G R E S S   P R O C E S S I N G   *******************
 
 *************************************************************************/
-# 238 "p4src/your_pipeline.p4"
+# 239 "p4src/your_pipeline.p4"
 control MyEgress(inout headers hdr,
                  inout metadata meta,
                  inout standard_metadata_t standard_metadata) {
@@ -1190,63 +1191,6 @@ control MyEgress(inout headers hdr,
     action drop_2(){
         mark_to_drop(standard_metadata);
     }
-
-    // multicast do encapsulation
-    //     |
-    //     |
-    //     v
-
-    // action do_encap_multicast(){
-    //     hdr.ethernet_2.setValid();
-    //     hdr.tunnel.setValid();
-    //     hdr.ethernet_2 = hdr.ethernet_1;
-
-    //     hdr.ethernet_1.etherType = TYPE_TUNNEL;
-    //     hdr.tunnel.tunnel_id = standard_metadata.egress_rid;
-    //     hdr.tunnel.pw_id = meta.pw_id;
-
-    // }
-    // table encap_multicast{
-    //     actions = {
-    //         do_encap_multicast;
-    //         NoAction;
-    //     }
-    //     key = {
-    //         standard_metadata.egress_rid :   exact;
-    //     }
-    //     size = 1024;
-    //     default_action = NoAction;
-    // }
-
-
-    // L2 learning
-    //     |
-    //     |
-    //     v
-    // action from_host(){
-    //     hdr.cpu.setValid();
-    //     hdr.cpu.tunnel_id = hdr.tunnel.tunnel_id;
-    //     hdr.cpu.pw_id_or_ingress_port = hdr.tunnel.pw_id;
-
-    // }
-    // action from_tunnel(){
-    //     hdr.cpu.setValid();
-    //     hdr.cpu.tunnel_id = hdr.tunnel.tunnel_id;
-    //     hdr.cpu.pw_id_or_ingress_port = (bit <16>)meta.ingress_port;
-    // }
-
-    // table cpu_encap{
-    //     actions = {
-    //         from_host;
-    //         from_tunnel;
-    //         NoAction;
-    //     }
-    //     key = {
-    //         hdr.tunnel.tunnel_id:   exact;
-    //     }
-    //     size = 1024;
-    //     default_action = NoAction;
-    // }
 
     table no_learning{
         key = {
@@ -1261,7 +1205,6 @@ control MyEgress(inout headers hdr,
         size = 1024;
         default_action = NoAction;
     }
-
 
     apply {
         if (standard_metadata.instance_type == 1){
@@ -1295,7 +1238,7 @@ control MyEgress(inout headers hdr,
 *************   C H E C K S U M    C O M P U T A T I O N   **************
 
 *************************************************************************/
-# 349 "p4src/your_pipeline.p4"
+# 292 "p4src/your_pipeline.p4"
 control MyComputeChecksum(inout headers hdr, inout metadata meta) {
      apply {
  update_checksum(
@@ -1322,7 +1265,7 @@ control MyComputeChecksum(inout headers hdr, inout metadata meta) {
 ***********************  S W I T C H  *******************************
 
 *************************************************************************/
-# 374 "p4src/your_pipeline.p4"
+# 317 "p4src/your_pipeline.p4"
 //switch architecture
 V1Switch(
 MyParser(),

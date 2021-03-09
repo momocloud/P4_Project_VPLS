@@ -193,6 +193,7 @@ control MyIngress(inout headers hdr,
     //     |
     //     |
     //     v
+    
     action L2_learning(){
         meta.ingress_port = standard_metadata.ingress_port;
         clone3(CloneType.I2E, 100, meta);
@@ -204,7 +205,7 @@ control MyIngress(inout headers hdr,
             NoAction;
         }
         key = {
-            hdr.ethernet_1.srcAddr:   exact;
+            hdr.ethernet_1.srcAddr: exact;
             standard_metadata.ingress_port: exact;
         }
         size = 1024;
@@ -243,63 +244,6 @@ control MyEgress(inout headers hdr,
         mark_to_drop(standard_metadata);
     }
 
-    // multicast do encapsulation
-    //     |
-    //     |
-    //     v
-
-    // action do_encap_multicast(){
-    //     hdr.ethernet_2.setValid();
-    //     hdr.tunnel.setValid();
-    //     hdr.ethernet_2 = hdr.ethernet_1;
-
-    //     hdr.ethernet_1.etherType = TYPE_TUNNEL;
-    //     hdr.tunnel.tunnel_id = standard_metadata.egress_rid;
-    //     hdr.tunnel.pw_id = meta.pw_id;
-
-    // }
-    // table encap_multicast{
-    //     actions = {
-    //         do_encap_multicast;
-    //         NoAction;
-    //     }
-    //     key = {
-    //         standard_metadata.egress_rid :   exact;
-    //     }
-    //     size = 1024;
-    //     default_action = NoAction;
-    // }
-
-
-    // L2 learning
-    //     |
-    //     |
-    //     v
-    // action from_host(){
-    //     hdr.cpu.setValid();
-    //     hdr.cpu.tunnel_id = hdr.tunnel.tunnel_id;
-    //     hdr.cpu.pw_id_or_ingress_port = hdr.tunnel.pw_id;
-
-    // }
-    // action from_tunnel(){
-    //     hdr.cpu.setValid();
-    //     hdr.cpu.tunnel_id = hdr.tunnel.tunnel_id;
-    //     hdr.cpu.pw_id_or_ingress_port = (bit <16>)meta.ingress_port;
-    // }
-
-    // table cpu_encap{
-    //     actions = {
-    //         from_host;
-    //         from_tunnel;
-    //         NoAction;
-    //     }
-    //     key = {
-    //         hdr.tunnel.tunnel_id:   exact;
-    //     }
-    //     size = 1024;
-    //     default_action = NoAction;
-    // }
-
     table no_learning{
         key = {
             hdr.cpu.macAddr: exact;
@@ -313,7 +257,6 @@ control MyEgress(inout headers hdr,
         size = 1024;
         default_action = NoAction;
     }
-
 
     apply {
         if (standard_metadata.instance_type == 1){
