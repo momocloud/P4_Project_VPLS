@@ -214,6 +214,34 @@
           "value" : ["scalars", "metadata.pw_id"]
         }
       ]
+    },
+    {
+      "id" : 2,
+      "name" : "fl_0",
+      "source_info" : {
+        "filename" : "p4src/your_pipeline.p4",
+        "line" : 199,
+        "column" : 35,
+        "source_fragment" : "meta"
+      },
+      "elements" : [
+        {
+          "type" : "field",
+          "value" : ["scalars", "metadata.ingress_port"]
+        },
+        {
+          "type" : "field",
+          "value" : ["scalars", "metadata.ecmp_hash"]
+        },
+        {
+          "type" : "field",
+          "value" : ["scalars", "metadata.ecmp_group_id"]
+        },
+        {
+          "type" : "field",
+          "value" : ["scalars", "metadata.pw_id"]
+        }
+      ]
     }
   ],
   "errors" : [
@@ -425,7 +453,7 @@
       "id" : 1,
       "source_info" : {
         "filename" : "p4src/your_pipeline.p4",
-        "line" : 294,
+        "line" : 293,
         "column" : 1,
         "source_fragment" : "update_checksum( ..."
       },
@@ -545,8 +573,14 @@
       "primitives" : []
     },
     {
-      "name" : "MyIngress.direct_forward_without_tunnel_act",
+      "name" : "NoAction",
       "id" : 10,
+      "runtime_data" : [],
+      "primitives" : []
+    },
+    {
+      "name" : "MyIngress.direct_forward_without_tunnel_act",
+      "id" : 11,
       "runtime_data" : [
         {
           "name" : "port",
@@ -577,7 +611,7 @@
     },
     {
       "name" : "MyIngress.decrease_ipv4_ttl",
-      "id" : 11,
+      "id" : 12,
       "runtime_data" : [],
       "primitives" : [
         {
@@ -620,151 +654,6 @@
             "line" : 43,
             "column" : 8,
             "source_fragment" : "hdr.ipv4.ttl = hdr.ipv4.ttl - 1"
-          }
-        }
-      ]
-    },
-    {
-      "name" : "MyIngress.encap_forward_with_tunnel_act",
-      "id" : 12,
-      "runtime_data" : [
-        {
-          "name" : "port",
-          "bitwidth" : 9
-        },
-        {
-          "name" : "tunnel_id",
-          "bitwidth" : 16
-        },
-        {
-          "name" : "pw_id",
-          "bitwidth" : 16
-        }
-      ],
-      "primitives" : [
-        {
-          "op" : "add_header",
-          "parameters" : [
-            {
-              "type" : "header",
-              "value" : "ethernet_2"
-            }
-          ],
-          "source_info" : {
-            "filename" : "p4src/your_pipeline.p4",
-            "line" : 48,
-            "column" : 8,
-            "source_fragment" : "hdr.ethernet_2.setValid()"
-          }
-        },
-        {
-          "op" : "add_header",
-          "parameters" : [
-            {
-              "type" : "header",
-              "value" : "tunnel"
-            }
-          ],
-          "source_info" : {
-            "filename" : "p4src/your_pipeline.p4",
-            "line" : 49,
-            "column" : 8,
-            "source_fragment" : "hdr.tunnel.setValid()"
-          }
-        },
-        {
-          "op" : "assign_header",
-          "parameters" : [
-            {
-              "type" : "header",
-              "value" : "ethernet_2"
-            },
-            {
-              "type" : "header",
-              "value" : "ethernet_1"
-            }
-          ],
-          "source_info" : {
-            "filename" : "p4src/your_pipeline.p4",
-            "line" : 51,
-            "column" : 8,
-            "source_fragment" : "hdr.ethernet_2 = hdr.ethernet_1"
-          }
-        },
-        {
-          "op" : "assign",
-          "parameters" : [
-            {
-              "type" : "field",
-              "value" : ["ethernet_1", "etherType"]
-            },
-            {
-              "type" : "hexstr",
-              "value" : "0x0233"
-            }
-          ],
-          "source_info" : {
-            "filename" : "p4src/include/headers.p4",
-            "line" : 6,
-            "column" : 28,
-            "source_fragment" : "0x233; ..."
-          }
-        },
-        {
-          "op" : "assign",
-          "parameters" : [
-            {
-              "type" : "field",
-              "value" : ["tunnel", "tunnel_id"]
-            },
-            {
-              "type" : "runtime_data",
-              "value" : 1
-            }
-          ],
-          "source_info" : {
-            "filename" : "p4src/your_pipeline.p4",
-            "line" : 55,
-            "column" : 8,
-            "source_fragment" : "hdr.tunnel.tunnel_id = tunnel_id"
-          }
-        },
-        {
-          "op" : "assign",
-          "parameters" : [
-            {
-              "type" : "field",
-              "value" : ["tunnel", "pw_id"]
-            },
-            {
-              "type" : "runtime_data",
-              "value" : 2
-            }
-          ],
-          "source_info" : {
-            "filename" : "p4src/your_pipeline.p4",
-            "line" : 56,
-            "column" : 8,
-            "source_fragment" : "hdr.tunnel.pw_id = pw_id"
-          }
-        },
-        {
-          "op" : "assign",
-          "parameters" : [
-            {
-              "type" : "field",
-              "value" : ["standard_metadata", "egress_spec"]
-            },
-            {
-              "type" : "runtime_data",
-              "value" : 0
-            }
-          ],
-          "source_info" : {
-            "filename" : "p4src/your_pipeline.p4",
-            "line" : 59,
-            "column" : 8,
-            "source_fragment" : "standard_metadata.egress_spec = port"
           }
         }
       ]
@@ -915,8 +804,153 @@
       ]
     },
     {
-      "name" : "MyIngress.direct_forward_with_tunnel_act",
+      "name" : "MyIngress.encap_forward_with_tunnel_act",
       "id" : 14,
+      "runtime_data" : [
+        {
+          "name" : "port",
+          "bitwidth" : 9
+        },
+        {
+          "name" : "tunnel_id",
+          "bitwidth" : 16
+        },
+        {
+          "name" : "pw_id",
+          "bitwidth" : 16
+        }
+      ],
+      "primitives" : [
+        {
+          "op" : "add_header",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "ethernet_2"
+            }
+          ],
+          "source_info" : {
+            "filename" : "p4src/your_pipeline.p4",
+            "line" : 48,
+            "column" : 8,
+            "source_fragment" : "hdr.ethernet_2.setValid()"
+          }
+        },
+        {
+          "op" : "add_header",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "tunnel"
+            }
+          ],
+          "source_info" : {
+            "filename" : "p4src/your_pipeline.p4",
+            "line" : 49,
+            "column" : 8,
+            "source_fragment" : "hdr.tunnel.setValid()"
+          }
+        },
+        {
+          "op" : "assign_header",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "ethernet_2"
+            },
+            {
+              "type" : "header",
+              "value" : "ethernet_1"
+            }
+          ],
+          "source_info" : {
+            "filename" : "p4src/your_pipeline.p4",
+            "line" : 51,
+            "column" : 8,
+            "source_fragment" : "hdr.ethernet_2 = hdr.ethernet_1"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ethernet_1", "etherType"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x0233"
+            }
+          ],
+          "source_info" : {
+            "filename" : "p4src/include/headers.p4",
+            "line" : 6,
+            "column" : 28,
+            "source_fragment" : "0x233; ..."
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["tunnel", "tunnel_id"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 1
+            }
+          ],
+          "source_info" : {
+            "filename" : "p4src/your_pipeline.p4",
+            "line" : 55,
+            "column" : 8,
+            "source_fragment" : "hdr.tunnel.tunnel_id = tunnel_id"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["tunnel", "pw_id"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 2
+            }
+          ],
+          "source_info" : {
+            "filename" : "p4src/your_pipeline.p4",
+            "line" : 56,
+            "column" : 8,
+            "source_fragment" : "hdr.tunnel.pw_id = pw_id"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "egress_spec"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 0
+            }
+          ],
+          "source_info" : {
+            "filename" : "p4src/your_pipeline.p4",
+            "line" : 59,
+            "column" : 8,
+            "source_fragment" : "standard_metadata.egress_spec = port"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyIngress.direct_forward_with_tunnel_act",
+      "id" : 15,
       "runtime_data" : [
         {
           "name" : "port",
@@ -947,7 +981,7 @@
     },
     {
       "name" : "MyIngress.decap_forward_with_tunnel_act",
-      "id" : 15,
+      "id" : 16,
       "runtime_data" : [
         {
           "name" : "port",
@@ -1027,7 +1061,7 @@
     },
     {
       "name" : "MyIngress.ecmp_group_act",
-      "id" : 16,
+      "id" : 17,
       "runtime_data" : [
         {
           "name" : "ecmp_group_id",
@@ -1089,7 +1123,7 @@
     },
     {
       "name" : "MyIngress.encap_multicast_act",
-      "id" : 17,
+      "id" : 18,
       "runtime_data" : [
         {
           "name" : "mcast_grp",
@@ -1143,7 +1177,7 @@
     },
     {
       "name" : "MyIngress.decap_multicast_act",
-      "id" : 18,
+      "id" : 19,
       "runtime_data" : [
         {
           "name" : "mcast_grp",
@@ -1222,8 +1256,8 @@
       ]
     },
     {
-      "name" : "MyIngress.L2_learning",
-      "id" : 19,
+      "name" : "MyIngress.l2_learning",
+      "id" : 20,
       "runtime_data" : [],
       "primitives" : [
         {
@@ -1267,8 +1301,53 @@
       ]
     },
     {
+      "name" : "MyIngress.l2_learning",
+      "id" : 21,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "metadata.ingress_port"]
+            },
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "ingress_port"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "p4src/your_pipeline.p4",
+            "line" : 198,
+            "column" : 8,
+            "source_fragment" : "meta.ingress_port = standard_metadata.ingress_port"
+          }
+        },
+        {
+          "op" : "clone_ingress_pkt_to_egress",
+          "parameters" : [
+            {
+              "type" : "hexstr",
+              "value" : "0x00000064"
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x2"
+            }
+          ],
+          "source_info" : {
+            "filename" : "p4src/your_pipeline.p4",
+            "line" : 199,
+            "column" : 8,
+            "source_fragment" : "clone3(CloneType.I2E, 100, meta)"
+          }
+        }
+      ]
+    },
+    {
       "name" : "act",
-      "id" : 20,
+      "id" : 22,
       "runtime_data" : [],
       "primitives" : [
         {
@@ -1298,7 +1377,7 @@
     },
     {
       "name" : "act_0",
-      "id" : 21,
+      "id" : 23,
       "runtime_data" : [],
       "primitives" : [
         {
@@ -1327,8 +1406,8 @@
       ]
     },
     {
-      "name" : "your_pipeline223",
-      "id" : 22,
+      "name" : "your_pipeline237",
+      "id" : 24,
       "runtime_data" : [],
       "primitives" : [
         {
@@ -1355,7 +1434,7 @@
           ],
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
-            "line" : 223,
+            "line" : 237,
             "column" : 21,
             "source_fragment" : "hdr.tcp.isValid() && ecmp_group.apply().hit"
           }
@@ -1364,7 +1443,7 @@
     },
     {
       "name" : "act_1",
-      "id" : 23,
+      "id" : 25,
       "runtime_data" : [],
       "primitives" : [
         {
@@ -1394,7 +1473,7 @@
     },
     {
       "name" : "act_2",
-      "id" : 24,
+      "id" : 26,
       "runtime_data" : [],
       "primitives" : [
         {
@@ -1423,8 +1502,8 @@
       ]
     },
     {
-      "name" : "your_pipeline223_0",
-      "id" : 25,
+      "name" : "your_pipeline237_0",
+      "id" : 27,
       "runtime_data" : [],
       "primitives" : [
         {
@@ -1458,7 +1537,7 @@
           ],
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
-            "line" : 223,
+            "line" : 237,
             "column" : 21,
             "source_fragment" : "hdr.tcp.isValid() && ecmp_group.apply().hit"
           }
@@ -1467,7 +1546,7 @@
     },
     {
       "name" : "act_3",
-      "id" : 26,
+      "id" : 28,
       "runtime_data" : [],
       "primitives" : [
         {
@@ -1497,7 +1576,7 @@
     },
     {
       "name" : "act_4",
-      "id" : 27,
+      "id" : 29,
       "runtime_data" : [],
       "primitives" : [
         {
@@ -1522,34 +1601,6 @@
               }
             }
           ]
-        }
-      ]
-    },
-    {
-      "name" : "NoAction",
-      "id" : 28,
-      "runtime_data" : [],
-      "primitives" : []
-    },
-    {
-      "name" : "MyEgress.drop_2",
-      "id" : 29,
-      "runtime_data" : [],
-      "primitives" : [
-        {
-          "op" : "mark_to_drop",
-          "parameters" : [
-            {
-              "type" : "header",
-              "value" : "standard_metadata"
-            }
-          ],
-          "source_info" : {
-            "filename" : "p4src/your_pipeline.p4",
-            "line" : 244,
-            "column" : 8,
-            "source_fragment" : "mark_to_drop(standard_metadata)"
-          }
         }
       ]
     },
@@ -1739,7 +1790,7 @@
       ]
     },
     {
-      "name" : "your_pipeline277",
+      "name" : "your_pipeline276",
       "id" : 34,
       "runtime_data" : [],
       "primitives" : [
@@ -1753,7 +1804,7 @@
           ],
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
-            "line" : 277,
+            "line" : 276,
             "column" : 12,
             "source_fragment" : "hdr.ethernet_2.setValid()"
           }
@@ -1768,7 +1819,7 @@
           ],
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
-            "line" : 278,
+            "line" : 277,
             "column" : 12,
             "source_fragment" : "hdr.tunnel.setValid()"
           }
@@ -1787,7 +1838,7 @@
           ],
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
-            "line" : 279,
+            "line" : 278,
             "column" : 12,
             "source_fragment" : "hdr.ethernet_2 = hdr.ethernet_1"
           }
@@ -1825,7 +1876,7 @@
           ],
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
-            "line" : 281,
+            "line" : 280,
             "column" : 12,
             "source_fragment" : "hdr.tunnel.tunnel_id = standard_metadata.egress_rid"
           }
@@ -1844,7 +1895,7 @@
           ],
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
-            "line" : 282,
+            "line" : 281,
             "column" : 12,
             "source_fragment" : "hdr.tunnel.pw_id = meta.pw_id"
           }
@@ -1862,16 +1913,16 @@
         "column" : 8,
         "source_fragment" : "MyIngress"
       },
-      "init_table" : "MyIngress.smac",
+      "init_table" : "node_2",
       "tables" : [
         {
-          "name" : "MyIngress.smac",
+          "name" : "MyIngress.l2_learning_tunnel",
           "id" : 0,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
             "line" : 202,
             "column" : 10,
-            "source_fragment" : "smac"
+            "source_fragment" : "l2_learning_tunnel"
           },
           "key" : [
             {
@@ -1882,8 +1933,8 @@
             },
             {
               "match_type" : "exact",
-              "name" : "standard_metadata.ingress_port",
-              "target" : ["standard_metadata", "ingress_port"],
+              "name" : "hdr.tunnel.pw_id",
+              "target" : ["tunnel", "pw_id"],
               "mask" : null
             }
           ],
@@ -1893,15 +1944,15 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [19, 9],
-          "actions" : ["MyIngress.L2_learning", "NoAction"],
-          "base_default_next" : "node_3",
+          "action_ids" : [20, 9],
+          "actions" : ["MyIngress.l2_learning", "NoAction"],
+          "base_default_next" : "MyIngress.direct_forward_with_tunnel",
           "next_tables" : {
-            "MyIngress.L2_learning" : "node_3",
-            "NoAction" : "node_3"
+            "MyIngress.l2_learning" : "MyIngress.direct_forward_with_tunnel",
+            "NoAction" : "MyIngress.direct_forward_with_tunnel"
           },
           "default_entry" : {
-            "action_id" : 19,
+            "action_id" : 20,
             "action_const" : false,
             "action_data" : [],
             "action_entry_const" : false
@@ -1936,7 +1987,7 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [14, 1],
+          "action_ids" : [15, 1],
           "actions" : ["MyIngress.direct_forward_with_tunnel_act", "NoAction"],
           "base_default_next" : "MyIngress.decap_forward_with_tunnel",
           "next_tables" : {
@@ -1979,7 +2030,7 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [15, 3],
+          "action_ids" : [16, 3],
           "actions" : ["MyIngress.decap_forward_with_tunnel_act", "NoAction"],
           "base_default_next" : "MyIngress.decap_multicast",
           "next_tables" : {
@@ -2016,12 +2067,12 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [18, 8],
+          "action_ids" : [19, 8],
           "actions" : ["MyIngress.decap_multicast_act", "NoAction"],
-          "base_default_next" : "node_24",
+          "base_default_next" : "node_25",
           "next_tables" : {
-            "MyIngress.decap_multicast_act" : "node_24",
-            "NoAction" : "node_24"
+            "MyIngress.decap_multicast_act" : "node_25",
+            "NoAction" : "node_25"
           },
           "default_entry" : {
             "action_id" : 8,
@@ -2031,8 +2082,51 @@
           }
         },
         {
-          "name" : "MyIngress.direct_forward_without_tunnel",
+          "name" : "MyIngress.l2_learning_non_tunnel",
           "id" : 4,
+          "source_info" : {
+            "filename" : "p4src/your_pipeline.p4",
+            "line" : 215,
+            "column" : 10,
+            "source_fragment" : "l2_learning_non_tunnel"
+          },
+          "key" : [
+            {
+              "match_type" : "exact",
+              "name" : "hdr.ethernet_1.srcAddr",
+              "target" : ["ethernet_1", "srcAddr"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "standard_metadata.ingress_port",
+              "target" : ["standard_metadata", "ingress_port"],
+              "mask" : null
+            }
+          ],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [21, 10],
+          "actions" : ["MyIngress.l2_learning", "NoAction"],
+          "base_default_next" : "MyIngress.direct_forward_without_tunnel",
+          "next_tables" : {
+            "MyIngress.l2_learning" : "MyIngress.direct_forward_without_tunnel",
+            "NoAction" : "MyIngress.direct_forward_without_tunnel"
+          },
+          "default_entry" : {
+            "action_id" : 21,
+            "action_const" : false,
+            "action_data" : [],
+            "action_entry_const" : false
+          }
+        },
+        {
+          "name" : "MyIngress.direct_forward_without_tunnel",
+          "id" : 5,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
             "line" : 77,
@@ -2059,7 +2153,7 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [10, 0],
+          "action_ids" : [11, 0],
           "actions" : ["MyIngress.direct_forward_without_tunnel_act", "NoAction"],
           "base_default_next" : null,
           "next_tables" : {
@@ -2075,29 +2169,6 @@
         },
         {
           "name" : "tbl_act",
-          "id" : 5,
-          "key" : [],
-          "match_type" : "exact",
-          "type" : "simple",
-          "max_size" : 1024,
-          "with_counters" : false,
-          "support_timeout" : false,
-          "direct_meters" : null,
-          "action_ids" : [20],
-          "actions" : ["act"],
-          "base_default_next" : "node_10",
-          "next_tables" : {
-            "act" : "node_10"
-          },
-          "default_entry" : {
-            "action_id" : 20,
-            "action_const" : true,
-            "action_data" : [],
-            "action_entry_const" : true
-          }
-        },
-        {
-          "name" : "tbl_act_0",
           "id" : 6,
           "key" : [],
           "match_type" : "exact",
@@ -2106,25 +2177,48 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [21],
-          "actions" : ["act_0"],
-          "base_default_next" : "node_10",
+          "action_ids" : [22],
+          "actions" : ["act"],
+          "base_default_next" : "node_11",
           "next_tables" : {
-            "act_0" : "node_10"
+            "act" : "node_11"
           },
           "default_entry" : {
-            "action_id" : 21,
+            "action_id" : 22,
             "action_const" : true,
             "action_data" : [],
             "action_entry_const" : true
           }
         },
         {
-          "name" : "tbl_your_pipeline223",
+          "name" : "tbl_act_0",
           "id" : 7,
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [23],
+          "actions" : ["act_0"],
+          "base_default_next" : "node_11",
+          "next_tables" : {
+            "act_0" : "node_11"
+          },
+          "default_entry" : {
+            "action_id" : 23,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_your_pipeline237",
+          "id" : 8,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
-            "line" : 223,
+            "line" : 237,
             "column" : 21,
             "source_fragment" : "hdr.tcp.isValid() && ecmp_group.apply().hit"
           },
@@ -2135,14 +2229,14 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [22],
-          "actions" : ["your_pipeline223"],
-          "base_default_next" : "node_17",
+          "action_ids" : [24],
+          "actions" : ["your_pipeline237"],
+          "base_default_next" : "node_18",
           "next_tables" : {
-            "your_pipeline223" : "node_17"
+            "your_pipeline237" : "node_18"
           },
           "default_entry" : {
-            "action_id" : 22,
+            "action_id" : 24,
             "action_const" : true,
             "action_data" : [],
             "action_entry_const" : true
@@ -2150,7 +2244,7 @@
         },
         {
           "name" : "MyIngress.ecmp_group",
-          "id" : 8,
+          "id" : 9,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
             "line" : 141,
@@ -2177,7 +2271,7 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [16, 5],
+          "action_ids" : [17, 5],
           "actions" : ["MyIngress.ecmp_group_act", "NoAction"],
           "base_default_next" : null,
           "next_tables" : {
@@ -2193,29 +2287,6 @@
         },
         {
           "name" : "tbl_act_1",
-          "id" : 9,
-          "key" : [],
-          "match_type" : "exact",
-          "type" : "simple",
-          "max_size" : 1024,
-          "with_counters" : false,
-          "support_timeout" : false,
-          "direct_meters" : null,
-          "action_ids" : [23],
-          "actions" : ["act_1"],
-          "base_default_next" : "tbl_your_pipeline223_0",
-          "next_tables" : {
-            "act_1" : "tbl_your_pipeline223_0"
-          },
-          "default_entry" : {
-            "action_id" : 23,
-            "action_const" : true,
-            "action_data" : [],
-            "action_entry_const" : true
-          }
-        },
-        {
-          "name" : "tbl_act_2",
           "id" : 10,
           "key" : [],
           "match_type" : "exact",
@@ -2224,25 +2295,48 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [24],
-          "actions" : ["act_2"],
-          "base_default_next" : "tbl_your_pipeline223_0",
+          "action_ids" : [25],
+          "actions" : ["act_1"],
+          "base_default_next" : "tbl_your_pipeline237_0",
           "next_tables" : {
-            "act_2" : "tbl_your_pipeline223_0"
+            "act_1" : "tbl_your_pipeline237_0"
           },
           "default_entry" : {
-            "action_id" : 24,
+            "action_id" : 25,
             "action_const" : true,
             "action_data" : [],
             "action_entry_const" : true
           }
         },
         {
-          "name" : "tbl_your_pipeline223_0",
+          "name" : "tbl_act_2",
           "id" : 11,
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [26],
+          "actions" : ["act_2"],
+          "base_default_next" : "tbl_your_pipeline237_0",
+          "next_tables" : {
+            "act_2" : "tbl_your_pipeline237_0"
+          },
+          "default_entry" : {
+            "action_id" : 26,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_your_pipeline237_0",
+          "id" : 12,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
-            "line" : 223,
+            "line" : 237,
             "column" : 21,
             "source_fragment" : "hdr.tcp.isValid() && ecmp_group.apply().hit"
           },
@@ -2253,14 +2347,14 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [25],
-          "actions" : ["your_pipeline223_0"],
-          "base_default_next" : "node_17",
+          "action_ids" : [27],
+          "actions" : ["your_pipeline237_0"],
+          "base_default_next" : "node_18",
           "next_tables" : {
-            "your_pipeline223_0" : "node_17"
+            "your_pipeline237_0" : "node_18"
           },
           "default_entry" : {
-            "action_id" : 25,
+            "action_id" : 27,
             "action_const" : true,
             "action_data" : [],
             "action_entry_const" : true
@@ -2268,7 +2362,7 @@
         },
         {
           "name" : "MyIngress.ecmp_forward",
-          "id" : 12,
+          "id" : 13,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
             "line" : 151,
@@ -2295,12 +2389,12 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [13, 6],
+          "action_ids" : [14, 6],
           "actions" : ["MyIngress.encap_forward_with_tunnel_act", "NoAction"],
-          "base_default_next" : "node_24",
+          "base_default_next" : "node_25",
           "next_tables" : {
-            "MyIngress.encap_forward_with_tunnel_act" : "node_24",
-            "NoAction" : "node_24"
+            "MyIngress.encap_forward_with_tunnel_act" : "node_25",
+            "NoAction" : "node_25"
           },
           "default_entry" : {
             "action_id" : 6,
@@ -2311,7 +2405,7 @@
         },
         {
           "name" : "MyIngress.encap_forward_with_tunnel",
-          "id" : 13,
+          "id" : 14,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
             "line" : 97,
@@ -2338,7 +2432,7 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [12, 2],
+          "action_ids" : [13, 2],
           "actions" : ["MyIngress.encap_forward_with_tunnel_act", "NoAction"],
           "base_default_next" : null,
           "next_tables" : {
@@ -2354,29 +2448,6 @@
         },
         {
           "name" : "tbl_act_3",
-          "id" : 14,
-          "key" : [],
-          "match_type" : "exact",
-          "type" : "simple",
-          "max_size" : 1024,
-          "with_counters" : false,
-          "support_timeout" : false,
-          "direct_meters" : null,
-          "action_ids" : [26],
-          "actions" : ["act_3"],
-          "base_default_next" : "node_22",
-          "next_tables" : {
-            "act_3" : "node_22"
-          },
-          "default_entry" : {
-            "action_id" : 26,
-            "action_const" : true,
-            "action_data" : [],
-            "action_entry_const" : true
-          }
-        },
-        {
-          "name" : "tbl_act_4",
           "id" : 15,
           "key" : [],
           "match_type" : "exact",
@@ -2385,14 +2456,37 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [27],
-          "actions" : ["act_4"],
-          "base_default_next" : "node_22",
+          "action_ids" : [28],
+          "actions" : ["act_3"],
+          "base_default_next" : "node_23",
           "next_tables" : {
-            "act_4" : "node_22"
+            "act_3" : "node_23"
           },
           "default_entry" : {
-            "action_id" : 27,
+            "action_id" : 28,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_act_4",
+          "id" : 16,
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [29],
+          "actions" : ["act_4"],
+          "base_default_next" : "node_23",
+          "next_tables" : {
+            "act_4" : "node_23"
+          },
+          "default_entry" : {
+            "action_id" : 29,
             "action_const" : true,
             "action_data" : [],
             "action_entry_const" : true
@@ -2400,7 +2494,7 @@
         },
         {
           "name" : "MyIngress.encap_multicast",
-          "id" : 16,
+          "id" : 17,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
             "line" : 177,
@@ -2421,12 +2515,12 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [17, 7],
+          "action_ids" : [18, 7],
           "actions" : ["MyIngress.encap_multicast_act", "NoAction"],
-          "base_default_next" : "node_24",
+          "base_default_next" : "node_25",
           "next_tables" : {
-            "MyIngress.encap_multicast_act" : "node_24",
-            "NoAction" : "node_24"
+            "MyIngress.encap_multicast_act" : "node_25",
+            "NoAction" : "node_25"
           },
           "default_entry" : {
             "action_id" : 7,
@@ -2437,7 +2531,7 @@
         },
         {
           "name" : "MyIngress.table_ipv4",
-          "id" : 17,
+          "id" : 18,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
             "line" : 117,
@@ -2451,7 +2545,7 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [11, 4],
+          "action_ids" : [12, 4],
           "actions" : ["MyIngress.decrease_ipv4_ttl", "NoAction"],
           "base_default_next" : null,
           "next_tables" : {
@@ -2459,7 +2553,7 @@
             "NoAction" : null
           },
           "default_entry" : {
-            "action_id" : 11,
+            "action_id" : 12,
             "action_const" : false,
             "action_data" : [],
             "action_entry_const" : false
@@ -2469,11 +2563,11 @@
       "action_profiles" : [],
       "conditionals" : [
         {
-          "name" : "node_3",
+          "name" : "node_2",
           "id" : 0,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
-            "line" : 217,
+            "line" : 229,
             "column" : 12,
             "source_fragment" : "hdr.tunnel.isValid()"
           },
@@ -2488,11 +2582,11 @@
               }
             }
           },
-          "true_next" : "MyIngress.direct_forward_with_tunnel",
-          "false_next" : "MyIngress.direct_forward_without_tunnel"
+          "true_next" : "MyIngress.l2_learning_tunnel",
+          "false_next" : "MyIngress.l2_learning_non_tunnel"
         },
         {
-          "name" : "node_10",
+          "name" : "node_11",
           "id" : 1,
           "expression" : {
             "type" : "expression",
@@ -2505,15 +2599,15 @@
               }
             }
           },
-          "false_next" : "node_11",
-          "true_next" : "node_24"
+          "false_next" : "node_12",
+          "true_next" : "node_25"
         },
         {
-          "name" : "node_11",
+          "name" : "node_12",
           "id" : 2,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
-            "line" : 223,
+            "line" : 237,
             "column" : 21,
             "source_fragment" : "hdr.tcp.isValid()"
           },
@@ -2535,11 +2629,11 @@
               }
             }
           },
-          "true_next" : "tbl_your_pipeline223",
+          "true_next" : "tbl_your_pipeline237",
           "false_next" : "MyIngress.ecmp_group"
         },
         {
-          "name" : "node_17",
+          "name" : "node_18",
           "id" : 3,
           "expression" : {
             "type" : "expression",
@@ -2556,7 +2650,7 @@
           "false_next" : "MyIngress.encap_forward_with_tunnel"
         },
         {
-          "name" : "node_22",
+          "name" : "node_23",
           "id" : 4,
           "expression" : {
             "type" : "expression",
@@ -2570,14 +2664,14 @@
             }
           },
           "false_next" : "MyIngress.encap_multicast",
-          "true_next" : "node_24"
+          "true_next" : "node_25"
         },
         {
-          "name" : "node_24",
+          "name" : "node_25",
           "id" : 5,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
-            "line" : 229,
+            "line" : 243,
             "column" : 12,
             "source_fragment" : "hdr.ipv4.isValid()"
           },
@@ -2602,15 +2696,15 @@
       "id" : 1,
       "source_info" : {
         "filename" : "p4src/your_pipeline.p4",
-        "line" : 239,
+        "line" : 253,
         "column" : 8,
         "source_fragment" : "MyEgress"
       },
-      "init_table" : "node_28",
+      "init_table" : "node_29",
       "tables" : [
         {
           "name" : "tbl_your_pipeline263",
-          "id" : 18,
+          "id" : 19,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
             "line" : 263,
@@ -2626,9 +2720,9 @@
           "direct_meters" : null,
           "action_ids" : [32],
           "actions" : ["your_pipeline263"],
-          "base_default_next" : "node_30",
+          "base_default_next" : "node_31",
           "next_tables" : {
-            "your_pipeline263" : "node_30"
+            "your_pipeline263" : "node_31"
           },
           "default_entry" : {
             "action_id" : 32,
@@ -2639,7 +2733,7 @@
         },
         {
           "name" : "tbl_your_pipeline267",
-          "id" : 19,
+          "id" : 20,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
             "line" : 267,
@@ -2668,7 +2762,7 @@
         },
         {
           "name" : "tbl_your_pipeline270",
-          "id" : 20,
+          "id" : 21,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
             "line" : 270,
@@ -2697,7 +2791,7 @@
         },
         {
           "name" : "tbl_your_pipeline273",
-          "id" : 21,
+          "id" : 22,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
             "line" : 273,
@@ -2713,9 +2807,9 @@
           "direct_meters" : null,
           "action_ids" : [33],
           "actions" : ["your_pipeline273"],
-          "base_default_next" : "MyEgress.no_learning",
+          "base_default_next" : null,
           "next_tables" : {
-            "your_pipeline273" : "MyEgress.no_learning"
+            "your_pipeline273" : null
           },
           "default_entry" : {
             "action_id" : 33,
@@ -2725,60 +2819,11 @@
           }
         },
         {
-          "name" : "MyEgress.no_learning",
-          "id" : 22,
-          "source_info" : {
-            "filename" : "p4src/your_pipeline.p4",
-            "line" : 247,
-            "column" : 10,
-            "source_fragment" : "no_learning"
-          },
-          "key" : [
-            {
-              "match_type" : "exact",
-              "name" : "hdr.cpu.macAddr",
-              "target" : ["ethernet_1", "srcAddr"],
-              "mask" : null
-            },
-            {
-              "match_type" : "exact",
-              "name" : "hdr.cpu.tunnel_id",
-              "target" : ["cpu", "tunnel_id"],
-              "mask" : null
-            },
-            {
-              "match_type" : "exact",
-              "name" : "hdr.cpu.pw_id_or_ingress_port",
-              "target" : ["cpu", "pw_id_or_ingress_port"],
-              "mask" : null
-            }
-          ],
-          "match_type" : "exact",
-          "type" : "simple",
-          "max_size" : 1024,
-          "with_counters" : false,
-          "support_timeout" : false,
-          "direct_meters" : null,
-          "action_ids" : [28, 29],
-          "actions" : ["NoAction", "MyEgress.drop_2"],
-          "base_default_next" : null,
-          "next_tables" : {
-            "NoAction" : null,
-            "MyEgress.drop_2" : null
-          },
-          "default_entry" : {
-            "action_id" : 28,
-            "action_const" : false,
-            "action_data" : [],
-            "action_entry_const" : false
-          }
-        },
-        {
-          "name" : "tbl_your_pipeline277",
+          "name" : "tbl_your_pipeline276",
           "id" : 23,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
-            "line" : 277,
+            "line" : 276,
             "column" : 12,
             "source_fragment" : "hdr.ethernet_2.setValid(); ..."
           },
@@ -2790,10 +2835,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [34],
-          "actions" : ["your_pipeline277"],
+          "actions" : ["your_pipeline276"],
           "base_default_next" : null,
           "next_tables" : {
-            "your_pipeline277" : null
+            "your_pipeline276" : null
           },
           "default_entry" : {
             "action_id" : 34,
@@ -2806,7 +2851,7 @@
       "action_profiles" : [],
       "conditionals" : [
         {
-          "name" : "node_28",
+          "name" : "node_29",
           "id" : 6,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
@@ -2832,7 +2877,7 @@
           "false_next" : "node_35"
         },
         {
-          "name" : "node_30",
+          "name" : "node_31",
           "id" : 7,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
@@ -2859,7 +2904,7 @@
           "id" : 8,
           "source_info" : {
             "filename" : "p4src/your_pipeline.p4",
-            "line" : 276,
+            "line" : 275,
             "column" : 17,
             "source_fragment" : "standard_metadata.egress_rid != 0"
           },
@@ -2878,7 +2923,7 @@
             }
           },
           "false_next" : null,
-          "true_next" : "tbl_your_pipeline277"
+          "true_next" : "tbl_your_pipeline276"
         }
       ]
     }
@@ -2889,7 +2934,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "p4src/your_pipeline.p4",
-        "line" : 294,
+        "line" : 293,
         "column" : 1,
         "source_fragment" : "update_checksum( ..."
       },

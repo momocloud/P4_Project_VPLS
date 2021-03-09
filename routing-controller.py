@@ -48,37 +48,34 @@ class EventBasedController(threading.Thread):
 
         for macAddr, tunnel_id, pw_id_or_ingress_port in packet_data:
             if self.topo.get_hosts_connected_to(self.sw_name) == []:
-                for port in self.whole_controller.get_all_tunnel_ports(self.sw_name):
-                    self.controller.table_add('smac', 'NoAction', [str(macAddr), str(port)], [])
+                self.controller.table_add('l2_learning_tunnel', 'NoAction', [str(macAddr), str(pw_id_or_ingress_port)], [])
                 return
             # non-tunnel packets
             if tunnel_id == 0:
                 egress_spec = pw_id_or_ingress_port
+                self.controller.table_add('l2_learning_non_tunnel', 'NoAction', [str(macAddr), str(egress_spec)], [])
                 pw_id = self.whole_controller.get_pwid(self.sw_name)[egress_spec]
                 # direct_forward_without_tunnel
                 for ingress_port in self.whole_controller.get_all_non_tunnel_ports(self.sw_name):
                     if ingress_port == egress_spec or self.whole_controller.get_pwid(self.sw_name)[ingress_port] != pw_id:
                         continue
                     else:
-                        print self.sw_name
                         self.controller.table_add('direct_forward_without_tunnel', 'direct_forward_without_tunnel_act', [str(ingress_port), str(macAddr)], [str(egress_spec)])
                 # decap_forward_with_tunnel
-                print self.sw_name
                 self.controller.table_add('decap_forward_with_tunnel', 'decap_forward_with_tunnel_act', [str(macAddr), str(pw_id)], [str(egress_spec)])
-                self.controller.table_add('no_learning', 'drop_2', [str(macAddr), str(tunnel_id), str(egress_spec)], [])
-
+                
             # tunnel packets
             else:
                 pw_id = pw_id_or_ingress_port
+                self.controller.table_add('l2_learning_tunnel', 'NoAction', [str(macAddr), str(pw_id)], [])
                 tunnel = self.whole_controller.tunnel_list[tunnel_id - 1]
-                # self.controller.table_add('no_learning', 'drop_2', [str(macAddr), str(tunnel_id), str(pw_id)], [])
+
                 # encap_forward_with_tunnel
                 for ingress_port in self.whole_controller.get_all_non_tunnel_ports(self.sw_name):
                     if self.whole_controller.get_pwid(self.sw_name)[ingress_port] != pw_id:
                         continue
                     else:
                         egress_spec = self.whole_controller.get_tunnel_ports(tunnel, self.sw_name)[0]
-                        print self.sw_name
                         self.controller.table_add('encap_forward_with_tunnel', 'encap_forward_with_tunnel_act', [str(ingress_port), str(macAddr)], [str(egress_spec), str(tunnel_id), str(pw_id)])
                 # # ecmp
                 the_other_pe = self.sw_name
@@ -97,18 +94,13 @@ class EventBasedController(threading.Thread):
                         if self.whole_controller.get_pwid(self.sw_name)[ingress_port] != pw_id:
                             continue
                         else:
-                            print self.sw_name
                             self.controller.table_add('ecmp_group', 'ecmp_group_act', [str(ingress_port), str(macAddr)], [str(self.ecmp_group_count), str(len(tunnel_l))])
                     for hash_value in range(len(tunnel_l)):
                         tunnel_ecmp = tunnel_l[hash_value]
                         tunnel_id_ecmp = self.whole_controller.tunnel_list.index(tunnel_ecmp) + 1
                         egress_spec = self.whole_controller.get_tunnel_ports(tunnel_ecmp, self.sw_name)[0]
-                        print self.sw_name
                         self.controller.table_add('ecmp_forward', 'encap_forward_with_tunnel_act', [str(self.ecmp_group_count), str(hash_value)], [str(egress_spec), str(tunnel_id_ecmp), str(pw_id)])
-                        self.controller.table_add('no_learning', 'drop_2', [str(macAddr), str(tunnel_id_ecmp), str(pw_id)], [])
                     self.ecmp_group_count += 1
-                else:
-                    self.controller.table_add('no_learning', 'drop_2', [str(macAddr), str(tunnel_id), str(pw_id)], [])
 
     def process_packet_rtt(self, packet_data):
         for customer_id, ip_addr_src, ip_addr_dst, rtt in packet_data:

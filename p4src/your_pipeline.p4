@@ -194,14 +194,27 @@ control MyIngress(inout headers hdr,
     //     |
     //     v
     
-    action L2_learning(){
+    action l2_learning(){
         meta.ingress_port = standard_metadata.ingress_port;
         clone3(CloneType.I2E, 100, meta);
     }
 
-    table smac{
+    table l2_learning_tunnel {
         actions = {
-            L2_learning;
+            l2_learning;
+            NoAction;
+        }
+        key = {
+            hdr.ethernet_1.srcAddr: exact;
+            hdr.tunnel.pw_id: exact;
+        }
+        size = 1024;
+        default_action = l2_learning;
+    }
+
+    table l2_learning_non_tunnel {
+        actions = {
+            l2_learning;
             NoAction;
         }
         key = {
@@ -209,16 +222,17 @@ control MyIngress(inout headers hdr,
             standard_metadata.ingress_port: exact;
         }
         size = 1024;
-        default_action = L2_learning;
+        default_action = l2_learning;
     }
 
     apply {
-        smac.apply();
         if (hdr.tunnel.isValid()) {
+            l2_learning_tunnel.apply();
             direct_forward_with_tunnel.apply();
             decap_forward_with_tunnel.apply();
             decap_multicast.apply();
         } else {
+            l2_learning_non_tunnel.apply();
             if (direct_forward_without_tunnel.apply().hit){}
             else if (hdr.tcp.isValid() && ecmp_group.apply().hit) { ecmp_forward.apply(); }
             else if (encap_forward_with_tunnel.apply().hit) {}
@@ -244,20 +258,6 @@ control MyEgress(inout headers hdr,
         mark_to_drop(standard_metadata);
     }
 
-    table no_learning{
-        key = {
-            hdr.cpu.macAddr: exact;
-            hdr.cpu.tunnel_id: exact;
-            hdr.cpu.pw_id_or_ingress_port: exact;
-        }
-        actions = {
-            NoAction;
-            drop_2;
-        }
-        size = 1024;
-        default_action = NoAction;
-    }
-
     apply {
         if (standard_metadata.instance_type == 1){
             hdr.cpu.setValid();
@@ -271,7 +271,6 @@ control MyEgress(inout headers hdr,
                 hdr.cpu.pw_id_or_ingress_port = (bit <16>)meta.ingress_port;
             }
             truncate((bit<32>)24);
-            no_learning.apply();
         }
         else if (standard_metadata.egress_rid != 0) {
             hdr.ethernet_2.setValid();
