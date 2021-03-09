@@ -42,11 +42,9 @@
       }
   },
     "switches": {
-      "s1": {"cpu_port" : true,
-        "cli_input": "./kun_solu/solution_2/s1-commands.txt"
+      "s1": {"cpu_port" : true
       },
-      "s2": {"cpu_port" : true,
-        "cli_input": "./kun_solu/solution_2/s2-commands.txt"
+      "s2": {"cpu_port" : true
       }
     }
   }

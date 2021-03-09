@@ -41,8 +41,7 @@
       }
   },
     "switches": {
-      "s1": {"cpu_port" : true,
-        "cli_input": "./kun_solu/solution_1/s1-commands.txt"
+      "s1": {"cpu_port" : true
       }
     }
   }

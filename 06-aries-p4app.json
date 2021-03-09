@@ -53,20 +53,15 @@
       }
   },
     "switches": {
-      "s1": {"cpu_port" : true,
-        "cli_input": "./kun_solu/solution_6/s1-commands.txt"
+      "s1": {"cpu_port" : true
       },
-      "s2": {"cpu_port" : true,
-        "cli_input": "./kun_solu/solution_6/s2-commands.txt"
+      "s2": {"cpu_port" : true
       },
-      "s3": {"cpu_port" : true,
-        "cli_input": "./kun_solu/solution_6/s3-commands.txt"
+      "s3": {"cpu_port" : true
       },
-      "s4": {"cpu_port" : true,
-        "cli_input": "./kun_solu/solution_6/s4-commands.txt"
+      "s4": {"cpu_port" : true
       },
-      "s5": {"cpu_port" : true,
-        "cli_input": "./kun_solu/solution_6/s5-commands.txt"
+      "s5": {"cpu_port" : true
       }
     }
   }
