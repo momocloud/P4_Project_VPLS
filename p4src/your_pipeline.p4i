@@ -798,6 +798,8 @@ typedef bit<16> pw_id_t;
 typedef bit<9> egressSpec_t;
 typedef bit<48> macAddr_t;
 typedef bit<32> ip4Addr_t;
+typedef bit<48> time_stamp_t;
+typedef bit<32> rtt_hash_t;
 
 header tunnel_t {
     tunnel_id_t tunnel_id;
@@ -856,24 +858,27 @@ header rtt_t{
     bit<16> pw_id;
     bit<32> ip_src;
     bit<32> ip_dst;
-    bit<48> rtt;
+    bit<48> rtt_v;
 }
 
 struct metadata {
+    bit<2> mode;
     egressSpec_t ingress_port;
     bit<14> ecmp_hash;
     bit<14> ecmp_group_id;
     bit<16> pw_id;
+    bit<16> rtt_pw_id;
+    time_stamp_t rtt_temp;
 }
 
 struct headers {
     ethernet_t ethernet_1;
     cpu_t cpu;
+    rtt_t rtt;
     tunnel_t tunnel;
     ethernet_t ethernet_2;
     ipv4_t ipv4;
     tcp_t tcp;
-    rtt_t rtt;
 }
 # 7 "p4src/your_pipeline.p4" 2
 # 1 "p4src/include/parsers.p4" 1
@@ -938,12 +943,12 @@ parser MyParser(packet_in packet,
 control MyDeparser(packet_out packet, in headers hdr) {
     apply {
         packet.emit(hdr.ethernet_1);
+        packet.emit(hdr.rtt);
         packet.emit(hdr.cpu);
         packet.emit(hdr.tunnel);
         packet.emit(hdr.ethernet_2);
         packet.emit(hdr.ipv4);
         packet.emit(hdr.tcp);
-        packet.emit(hdr.rtt);
     }
 }
 # 8 "p4src/your_pipeline.p4" 2
@@ -983,10 +988,6 @@ control MyIngress(inout headers hdr,
     action direct_forward_without_tunnel_act(egressSpec_t port) {
         // 转发
         standard_metadata.egress_spec = port;
-    }
-
-    action decrease_ipv4_ttl() {
-        hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
 
     action encap_forward_with_tunnel_act(egressSpec_t port, tunnel_id_t tunnel_id, pw_id_t pw_id) {
@@ -1060,13 +1061,6 @@ control MyIngress(inout headers hdr,
         default_action = NoAction;
     }
 
-    table table_ipv4 {
-        key = {}
-        actions = { decrease_ipv4_ttl; NoAction; }
-        size = 1024;
-        default_action = decrease_ipv4_ttl;
-    }
-
     // ecmp
     //   |
     //   |
@@ -1134,13 +1128,13 @@ control MyIngress(inout headers hdr,
         default_action = NoAction;
     }
 
-
     // L2 learning
     //     |
     //     |
     //     v
 
     action l2_learning(){
+        meta.mode = 1;
         meta.ingress_port = standard_metadata.ingress_port;
         clone3(CloneType.I2E, 100, meta);
     }
@@ -1171,7 +1165,27 @@ control MyIngress(inout headers hdr,
         default_action = l2_learning;
     }
 
+    //    RTT
+    //     |
+    //     |
+    //     v
+
+    register<time_stamp_t> (1024) time_list;
+    register<bit<1>> (1024) time_filter;
+
+    action get_pwid_act(pw_id_t pw_id) {
+        meta.rtt_pw_id = pw_id;
+    }
+
+    table get_pwid {
+        key = { standard_metadata.ingress_port: exact; }
+        actions = { NoAction; get_pwid_act; }
+        size = 256;
+        default_action = NoAction;
+    }
+
     apply {
+        meta.mode = 0;
         if (hdr.tunnel.isValid()) {
             l2_learning_tunnel.apply();
             direct_forward_with_tunnel.apply();
@@ -1185,9 +1199,32 @@ control MyIngress(inout headers hdr,
             else {
                 encap_multicast.apply();
             }
-        }
-        if (hdr.ipv4.isValid()) {
-            table_ipv4.apply();
+            if (hdr.tcp.isValid() && meta.mode == 0) {
+                get_pwid.apply();
+                meta.mode = 2;
+                rtt_hash_t rtt_hash;
+                hash(rtt_hash, HashAlgorithm.crc16, (bit<1>)0,
+                     { hdr.ipv4.dstAddr,
+                       hdr.ipv4.srcAddr,
+                          hdr.tcp.dstPort,
+                          hdr.tcp.srcPort,
+                          hdr.tunnel.pw_id},
+                                             (bit<16>) 1024);
+                if (hdr.tcp.syn == 1) {
+                    time_filter.write(rtt_hash, (bit<1>)1);
+                    time_list.write(rtt_hash, standard_metadata.ingress_global_timestamp);
+                } else if (hdr.tcp.ack == 1) {
+                    bit<1> flag;
+                    time_filter.read(flag, rtt_hash);
+                    if (flag == 1) {
+                        time_filter.write(rtt_hash, (bit<1>)0);
+                        time_stamp_t previous_time_stamp;
+                        time_list.read(previous_time_stamp, rtt_hash);
+                        meta.rtt_temp = standard_metadata.ingress_global_timestamp - previous_time_stamp;
+                        clone3(CloneType.I2E, 100, meta);
+                    }
+                }
+            }
         }
     }
 }
@@ -1197,7 +1234,7 @@ control MyIngress(inout headers hdr,
 ****************  E G R E S S   P R O C E S S I N G   *******************
 
 *************************************************************************/
-# 253 "p4src/your_pipeline.p4"
+# 285 "p4src/your_pipeline.p4"
 control MyEgress(inout headers hdr,
                  inout metadata meta,
                  inout standard_metadata_t standard_metadata) {
@@ -1207,18 +1244,29 @@ control MyEgress(inout headers hdr,
     }
 
     apply {
-        if (standard_metadata.instance_type == 1){
-            hdr.cpu.setValid();
-            hdr.cpu.macAddr = hdr.ethernet_1.srcAddr;
-            hdr.ethernet_1.etherType = L2_LEARN_ETHER_TYPE;
-            if (hdr.tunnel.isValid()) {
-                hdr.cpu.tunnel_id = hdr.tunnel.tunnel_id;
-                hdr.cpu.pw_id_or_ingress_port = hdr.tunnel.pw_id;
-            } else {
-                hdr.cpu.tunnel_id = 0;
-                hdr.cpu.pw_id_or_ingress_port = (bit <16>)meta.ingress_port;
+        if (standard_metadata.instance_type == 1) {
+            if (meta.mode == 1) {
+                hdr.cpu.setValid();
+                hdr.cpu.macAddr = hdr.ethernet_1.srcAddr;
+                hdr.ethernet_1.etherType = L2_LEARN_ETHER_TYPE;
+                if (hdr.tunnel.isValid()) {
+                    hdr.cpu.tunnel_id = hdr.tunnel.tunnel_id;
+                    hdr.cpu.pw_id_or_ingress_port = hdr.tunnel.pw_id;
+                } else {
+                    hdr.cpu.tunnel_id = 0;
+                    hdr.cpu.pw_id_or_ingress_port = (bit<16>)meta.ingress_port;
+                }
+                truncate((bit<32>)24);
             }
-            truncate((bit<32>)24);
+            else {
+                hdr.rtt.setValid();
+                hdr.rtt.rtt_v = meta.rtt_temp;
+                hdr.rtt.pw_id = meta.rtt_pw_id;
+                hdr.rtt.ip_src = hdr.ipv4.srcAddr;
+                hdr.rtt.ip_dst = hdr.ipv4.dstAddr;
+                hdr.ethernet_1.etherType = RTT_ETHER_TYPE;
+                truncate((bit<32>)30);
+            }
         }
         else if (standard_metadata.egress_rid != 0) {
             hdr.ethernet_2.setValid();
@@ -1237,7 +1285,7 @@ control MyEgress(inout headers hdr,
 *************   C H E C K S U M    C O M P U T A T I O N   **************
 
 *************************************************************************/
-# 291 "p4src/your_pipeline.p4"
+# 334 "p4src/your_pipeline.p4"
 control MyComputeChecksum(inout headers hdr, inout metadata meta) {
      apply {
  update_checksum(
@@ -1264,7 +1312,7 @@ control MyComputeChecksum(inout headers hdr, inout metadata meta) {
 ***********************  S W I T C H  *******************************
 
 *************************************************************************/
-# 316 "p4src/your_pipeline.p4"
+# 359 "p4src/your_pipeline.p4"
 //switch architecture
 V1Switch(
 MyParser(),

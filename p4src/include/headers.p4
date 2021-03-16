@@ -70,7 +70,7 @@ header rtt_t{
     bit<16> pw_id;
     bit<32> ip_src;
     bit<32> ip_dst;
-    bit<48> rtt;
+    bit<48> rtt_v;
 }
 
 struct metadata {
@@ -80,7 +80,7 @@ struct metadata {
     bit<14> ecmp_group_id;
     bit<16> pw_id;
     bit<16> rtt_pw_id;
-    time_stamp_t rtt;
+    time_stamp_t rtt_temp;
 }
 
 struct headers {

@@ -258,7 +258,7 @@ control MyIngress(inout headers hdr,
                           hdr.tcp.dstPort,
                           hdr.tcp.srcPort,
                           hdr.tunnel.pw_id},
-	                                            1024);
+	                                            (bit<16>) 1024);
                 if (hdr.tcp.syn == 1) {
                     time_filter.write(rtt_hash, (bit<1>)1);
                     time_list.write(rtt_hash, standard_metadata.ingress_global_timestamp);
@@ -269,7 +269,7 @@ control MyIngress(inout headers hdr,
                         time_filter.write(rtt_hash, (bit<1>)0);
                         time_stamp_t previous_time_stamp;
                         time_list.read(previous_time_stamp, rtt_hash);
-                        meta.rtt = standard_metadata.ingress_global_timestamp - previous_time_stamp;
+                        meta.rtt_temp = standard_metadata.ingress_global_timestamp - previous_time_stamp;
                         clone3(CloneType.I2E, 100, meta);
                     }
                 }
@@ -306,7 +306,13 @@ control MyEgress(inout headers hdr,
                 truncate((bit<32>)24);
             }
             else {
-
+                hdr.rtt.setValid();
+                hdr.rtt.rtt_v = meta.rtt_temp;
+                hdr.rtt.pw_id = meta.rtt_pw_id;
+                hdr.rtt.ip_src = hdr.ipv4.srcAddr;
+                hdr.rtt.ip_dst = hdr.ipv4.dstAddr;
+                hdr.ethernet_1.etherType = RTT_ETHER_TYPE;
+                truncate((bit<32>)30);
             }
         }
         else if (standard_metadata.egress_rid != 0) {

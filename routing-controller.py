@@ -312,7 +312,7 @@ class RoutingController(object):
 
             for ingress_port in self.get_all_non_tunnel_ports(pe):
                 pw_id = self.get_pwid(pe)[ingress_port]
-                self.controllers[pe].table_add('get_pwid', 'get_pwid_act', [ingress_port], [pw_id])
+                self.controllers[pe].table_add('get_pwid', 'get_pwid_act', [str(ingress_port)], [str(pw_id)])
                 if pw_id == 1:
                     self.controllers[pe].table_add('encap_multicast', 'encap_multicast_act', [str(ingress_port)], ['1', str(pw_id)])
                 elif pw_id == 2:
