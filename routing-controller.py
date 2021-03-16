@@ -43,9 +43,6 @@ class EventBasedController(threading.Thread):
             self.process_packet_rtt([(rtt_header.customer_id,rtt_header.ip_addr_src,rtt_header.ip_addr_dst,rtt_header.rtt)])
 
     def process_packet(self, packet_data):
-        ### write your learning logic here
-        ### use exercise 04-Learning as a reference point
-
         for macAddr, tunnel_id, pw_id_or_ingress_port in packet_data:
             if self.topo.get_hosts_connected_to(self.sw_name) == []:
                 self.controller.table_add('l2_learning_tunnel', 'NoAction', [str(macAddr), str(pw_id_or_ingress_port)], [])
@@ -224,10 +221,6 @@ class RoutingController(object):
                 self.non_pe_list.append(sw_name)
 
     def process_network(self):
-        ### logic to be executed at the start-up of the topology
-        ### hint: compute ECMP paths here
-        ### use exercise 08-Simple Routing as a reference
-
         # PE Part
         for pe in self.pe_list:
             # group_id = 0
@@ -319,6 +312,7 @@ class RoutingController(object):
 
             for ingress_port in self.get_all_non_tunnel_ports(pe):
                 pw_id = self.get_pwid(pe)[ingress_port]
+                self.controllers[pe].table_add('get_pwid', 'get_pwid_act', [ingress_port], [pw_id])
                 if pw_id == 1:
                     self.controllers[pe].table_add('encap_multicast', 'encap_multicast_act', [str(ingress_port)], ['1', str(pw_id)])
                 elif pw_id == 2:
@@ -344,11 +338,6 @@ class RoutingController(object):
 
         print '=====tunnel_list below====='
         print self.tunnel_list
-        # print '====something test below===='
-        # for port in self.get_all_tunnel_ports('s1'):
-        #     print 's1-' + str(port) + ': ' + str(self.get_port_tunnels(port, 's1'))
-        # for port in self.get_all_tunnel_ports('s2'):
-        #     print 's2-' + str(port) + ': ' + str(self.get_port_tunnels(port, 's2'))
 
 if __name__ == "__main__":
     import sys

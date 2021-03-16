@@ -10,6 +10,8 @@ typedef bit<16> pw_id_t;
 typedef bit<9>  egressSpec_t;
 typedef bit<48> macAddr_t;
 typedef bit<32> ip4Addr_t;
+typedef bit<48> time_stamp_t;
+typedef bit<32> rtt_hash_t;
 
 header tunnel_t {
     tunnel_id_t tunnel_id;
@@ -72,19 +74,22 @@ header rtt_t{
 }
 
 struct metadata {
+    bit<2> mode;
     egressSpec_t ingress_port;
     bit<14> ecmp_hash;
     bit<14> ecmp_group_id;
     bit<16> pw_id;
+    bit<16> rtt_pw_id;
+    time_stamp_t rtt;
 }
 
 struct headers {
     ethernet_t   ethernet_1;
     cpu_t        cpu;
+    rtt_t        rtt;
     tunnel_t     tunnel;
     ethernet_t   ethernet_2;
     ipv4_t 		 ipv4;
     tcp_t        tcp;
-    rtt_t        rtt;
 }
 
