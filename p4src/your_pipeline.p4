@@ -35,38 +35,30 @@ control MyIngress(inout headers hdr,
     }
 
     action direct_forward_without_tunnel_act(egressSpec_t port) {
-        // 转发
         standard_metadata.egress_spec = port;
     }
 
     action encap_forward_with_tunnel_act(egressSpec_t port, tunnel_id_t tunnel_id, pw_id_t pw_id) {
-        // 报头设置有效
         hdr.ethernet_2.setValid();
         hdr.tunnel.setValid();
-
         hdr.ethernet_2 = hdr.ethernet_1;
 
-        // 封装隧道头
         hdr.ethernet_1.etherType = TYPE_TUNNEL;
         hdr.tunnel.tunnel_id = tunnel_id;
         hdr.tunnel.pw_id = pw_id;
 
-        // 转发
         standard_metadata.egress_spec = port;
     }
 
     action direct_forward_with_tunnel_act(egressSpec_t port) {
-        // 转发
         standard_metadata.egress_spec = port;
     }
 
     action decap_forward_with_tunnel_act(egressSpec_t port) {
-        // 拆包
         hdr.ethernet_1.etherType = hdr.ethernet_2.etherType;
         hdr.ethernet_2.setInvalid();
         hdr.tunnel.setInvalid();
 
-        // 转发
         standard_metadata.egress_spec = port;
     }
 

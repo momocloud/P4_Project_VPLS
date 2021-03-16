@@ -3,7 +3,7 @@
 *************************************************************************/
 
 const bit<16> TYPE_IPV4 = 0x800;
-const bit<16> TYPE_TUNNEL = 0x233;
+const bit<16> TYPE_TUNNEL = 0x2333;
 
 typedef bit<16> tunnel_id_t;
 typedef bit<16> pw_id_t;

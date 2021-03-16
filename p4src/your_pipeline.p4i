@@ -791,7 +791,7 @@ package V1Switch<H, M>(Parser<H, M> p,
 *************************************************************************/
 # 5 "p4src/include/headers.p4"
 const bit<16> TYPE_IPV4 = 0x800;
-const bit<16> TYPE_TUNNEL = 0x233;
+const bit<16> TYPE_TUNNEL = 0x2333;
 
 typedef bit<16> tunnel_id_t;
 typedef bit<16> pw_id_t;
@@ -986,38 +986,30 @@ control MyIngress(inout headers hdr,
     }
 
     action direct_forward_without_tunnel_act(egressSpec_t port) {
-        // 转发
         standard_metadata.egress_spec = port;
     }
 
     action encap_forward_with_tunnel_act(egressSpec_t port, tunnel_id_t tunnel_id, pw_id_t pw_id) {
-        // 报头设置有效
         hdr.ethernet_2.setValid();
         hdr.tunnel.setValid();
-
         hdr.ethernet_2 = hdr.ethernet_1;
 
-        // 封装隧道头
         hdr.ethernet_1.etherType = TYPE_TUNNEL;
         hdr.tunnel.tunnel_id = tunnel_id;
         hdr.tunnel.pw_id = pw_id;
 
-        // 转发
         standard_metadata.egress_spec = port;
     }
 
     action direct_forward_with_tunnel_act(egressSpec_t port) {
-        // 转发
         standard_metadata.egress_spec = port;
     }
 
     action decap_forward_with_tunnel_act(egressSpec_t port) {
-        // 拆包
         hdr.ethernet_1.etherType = hdr.ethernet_2.etherType;
         hdr.ethernet_2.setInvalid();
         hdr.tunnel.setInvalid();
 
-        // 转发
         standard_metadata.egress_spec = port;
     }
 
@@ -1234,7 +1226,7 @@ control MyIngress(inout headers hdr,
 ****************  E G R E S S   P R O C E S S I N G   *******************
 
 *************************************************************************/
-# 285 "p4src/your_pipeline.p4"
+# 277 "p4src/your_pipeline.p4"
 control MyEgress(inout headers hdr,
                  inout metadata meta,
                  inout standard_metadata_t standard_metadata) {
@@ -1285,7 +1277,7 @@ control MyEgress(inout headers hdr,
 *************   C H E C K S U M    C O M P U T A T I O N   **************
 
 *************************************************************************/
-# 334 "p4src/your_pipeline.p4"
+# 326 "p4src/your_pipeline.p4"
 control MyComputeChecksum(inout headers hdr, inout metadata meta) {
      apply {
  update_checksum(
@@ -1312,7 +1304,7 @@ control MyComputeChecksum(inout headers hdr, inout metadata meta) {
 ***********************  S W I T C H  *******************************
 
 *************************************************************************/
-# 359 "p4src/your_pipeline.p4"
+# 351 "p4src/your_pipeline.p4"
 //switch architecture
 V1Switch(
 MyParser(),
