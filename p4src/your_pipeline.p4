@@ -39,10 +39,6 @@ control MyIngress(inout headers hdr,
         standard_metadata.egress_spec = port;
     }
 
-    action decrease_ipv4_ttl() {
-        hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
-    }
-
     action encap_forward_with_tunnel_act(egressSpec_t port, tunnel_id_t tunnel_id, pw_id_t pw_id) {
         // 报头设置有效
         hdr.ethernet_2.setValid();
@@ -112,13 +108,6 @@ control MyIngress(inout headers hdr,
         actions = { decap_forward_with_tunnel_act; NoAction; }
         size = 1024;
         default_action = NoAction;
-    }
-
-    table table_ipv4 {
-        key = {}
-        actions = { decrease_ipv4_ttl; NoAction; }
-        size = 1024;
-        default_action = decrease_ipv4_ttl;
     }
 
     // ecmp
@@ -251,26 +240,6 @@ control MyIngress(inout headers hdr,
             direct_forward_with_tunnel.apply();
             decap_forward_with_tunnel.apply();
             decap_multicast.apply();
-            if (hdr.tcp.isValid() && meta.mode == 0) {
-                meta.mode = 2;
-                rtt_hash_t rtt_hash;
-                hash(rtt_hash, HashAlgorithm.crc16, (bit<1>)0,
-	                { hdr.ipv4.dstAddr,
-	                  hdr.ipv4.srcAddr,
-                      hdr.tcp.dstPort,
-                      hdr.tcp.srcPort,
-                      hdr.tunnel.pw_id},
-	                                        1024);
-                bit<1> flag;
-                time_filter.read(flag, rtt_hash);
-                if (flag == 1) {
-                    time_filter.write(rtt_hash, (bit<1>)0);
-                    time_stamp_t previous_time_stamp;
-                    time_list.read(previous_time_stamp, rtt_hash);
-                    meta.rtt = standard_metadata.ingress_global_timestamp - previous_time_stamp;
-                    clone3(CloneType.I2E, 100, meta);
-                }
-            }
         } else {
             l2_learning_non_tunnel.apply();
             if (direct_forward_without_tunnel.apply().hit){}
@@ -282,12 +251,29 @@ control MyIngress(inout headers hdr,
             if (hdr.tcp.isValid() && meta.mode == 0) {
                 get_pwid.apply();
                 meta.mode = 2;
-                
-
+                rtt_hash_t rtt_hash;
+                hash(rtt_hash, HashAlgorithm.crc16, (bit<1>)0,
+	                    { hdr.ipv4.dstAddr,
+	                      hdr.ipv4.srcAddr,
+                          hdr.tcp.dstPort,
+                          hdr.tcp.srcPort,
+                          hdr.tunnel.pw_id},
+	                                            1024);
+                if (hdr.tcp.syn == 1) {
+                    time_filter.write(rtt_hash, (bit<1>)1);
+                    time_list.write(rtt_hash, standard_metadata.ingress_global_timestamp);
+                } else if (hdr.tcp.ack == 1) {
+                    bit<1> flag;
+                    time_filter.read(flag, rtt_hash);
+                    if (flag == 1) {
+                        time_filter.write(rtt_hash, (bit<1>)0);
+                        time_stamp_t previous_time_stamp;
+                        time_list.read(previous_time_stamp, rtt_hash);
+                        meta.rtt = standard_metadata.ingress_global_timestamp - previous_time_stamp;
+                        clone3(CloneType.I2E, 100, meta);
+                    }
+                }
             }
-        }
-        if (hdr.ipv4.isValid()) {
-            table_ipv4.apply();
         }
     }
 }
