@@ -11,4 +11,6 @@
 | encap_multicast               | ingress_port                                  | encap_multicast_act(mcast_grp, pw_id)                        |
 | decap_multicast               | pw_id                                         | decap_multicast_act(mcast_grp)                               |
 | smac                          | src_addr, ingress_port                        | NoAction()                                                   |
-| no_learning                   | mac_addr, tunnel_id, pw_id_or_ingress_port    | drop_2()                                                     |
+| l2_learning_tunnel            | mac_addr, pw_id                               | NoAction()                                                   |
+| l2_learning_non_tunnel        | mac_addr, ingress_port                        | NoAction()                                                   |
+| get_pwid                      | ingress_port                                  | get_pwid_act(pw_id)                                          |
