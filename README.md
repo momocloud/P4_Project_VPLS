@@ -1,4 +1,4 @@
-# IK2217-P4_Project-Group 4
+# IK2217-P4_Project-Group_4
 
 ## Method of starting the program
 
