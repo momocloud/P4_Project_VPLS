@@ -1,5 +1,7 @@
 # IK2217-P4_Project-Group_4
 
+We have completed all five tasks. The project is done through scripts instead of static configuration files. Auto-arp is set to false.
+
 ## Method of starting the program
 
 1. Open a terminal and start P4 program.
