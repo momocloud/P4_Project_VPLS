@@ -66,8 +66,8 @@ We have completed all five tasks. The project is done through scripts instead of
    
 ## Some files useful
 
-   (control plane api)[./controlplane_api.md]
+   (control plane api)[file:///controlplane_api.md]
    
-   (data plane api)[./dataplane_api.md]
+   (data plane api)[file:///dataplane_api.md]
    
    
